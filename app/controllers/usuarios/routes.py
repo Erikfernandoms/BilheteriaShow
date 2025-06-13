@@ -13,7 +13,7 @@ def get_db():
     finally:
         conn.close()
 
-@router.get("/")#, response_model=list[UsuarioOut])
+@router.get("/")
 def listar(db=Depends(get_db)):
     return listar_usuarios(db)
 
@@ -36,7 +36,7 @@ def atualizar(usuario_id: int, dados: UsuarioBase, db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     return usuario
 
-@router.delete("/{user_id}")
+@router.delete("/{usuario_id}", response_model=None)
 def deletar(usuario_id: int, db: Session = Depends(get_db)):
     sucesso = deletar_usuario(db, usuario_id)
     if not sucesso:

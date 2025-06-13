@@ -66,20 +66,44 @@ def menu_conta():
 
 
 def atualizar_conta():
-    response = requests.put("http://localhost:8000/usuarios/"+usuario_logado["email"], json=usuario_logado)
+    global usuario_logado
+    print("\n=== ATUALIZAR CONTA ===")
+    print("Deixe o campo vazio se não quiser alterar.")
+    nome = input(f"Nome ({usuario_logado['nome']}): ") or usuario_logado['nome']
+    email = input(f"Email ({usuario_logado['email']}): ") or usuario_logado['email']
+    senha = input(f"Senha ({usuario_logado['senha']}): ") or usuario_logado['senha']
+    cpf = input(f"CPF ({usuario_logado['cpf']}): ") or usuario_logado['cpf']
+    telefone = input(f"Telefone ({usuario_logado['telefone']}): ") or usuario_logado['telefone']
+    cep = input(f"CEP ({usuario_logado['cep']}): ") or usuario_logado['cep']
+    usuario_logado_alterado = {
+        "nome": nome,
+        "email": email,
+        "senha": senha,
+        "cpf": cpf,
+        "telefone": telefone,
+        "cep": cep
+    }
+    id = usuario_logado["id_usuario"]
+    response = requests.put(f"http://localhost:8000/usuarios/{id}", json=usuario_logado_alterado)
     if response.status_code == 200:
         print("✅ Conta atualizada com sucesso!")
-        usuario_logado = response.json()  # Atualiza o usuário logado com os novos dados
+        usuario_logado = response.json()
+        return
     else:
         print("❌ Erro ao atualizar conta. Tente novamente.")
+        return
 
 def deletar_conta():
-    response = requests.delete("http://localhost:8000/usuarios/"+usuario_logado["id_usuario"])
+    global usuario_logado
+    id = usuario_logado["id_usuario"]
+    response = requests.delete(f"http://localhost:8000/usuarios/{id}")
     if response.status_code == 200:
         print("✅ Conta deletada com sucesso!")
-        usuario_logado = None  # Limpa o usuário logado
+        usuario_logado = None
+        return
     else:
         print("❌ Erro ao deletar conta. Tente novamente.")
+        return
 
 def login():
     global usuario_logado
@@ -88,15 +112,14 @@ def login():
     response = requests.get("http://localhost:8000/usuarios/"+email)
     if response.status_code == 200:
         usuarios = response.json()
-        print("Digite a sua senha:")
-        senha = input("Senha: ")
+        senha = input("Digite a sua senha: ")
         if senha != usuarios["senha"]:
             print("❌ Senha incorreta.")
             return
         else:
             nome = usuarios["nome"]
             print(f"✅ Bem-vindo, {nome}!")
-            usuario_logado = usuarios  # Aqui salva o usuário logado!
+            usuario_logado = usuarios
             return
     else:
         print("❌ Usuário não encontrado.")

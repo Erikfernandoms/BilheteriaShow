@@ -17,7 +17,7 @@ def criar_usuario(conn, usuario):
     """, (usuario.nome, usuario.email, usuario.cpf, usuario.senha, usuario.telefone, usuario.cep))
     conn.commit()
     return {
-        "id_usuario": usuario.id_usuario,
+        "id_usuario": cursor.lastrowid,
         "nome": usuario.nome,
         "email": usuario.email,
         "cpf": usuario.cpf,
