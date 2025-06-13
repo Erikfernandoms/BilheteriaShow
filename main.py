@@ -15,19 +15,22 @@ def menu_principal():
         escolha = input("Escolha uma opção: ")
 
         if escolha == "1":
-            print("\n=== LOGIN ===")
-            print("1 - Entrar")
-            print("2 - Criar conta")
-            input_escolha = input("Escolha uma opção: ")
-            if input_escolha == "1":
-                if usuario_logado:
-                    print("Você já está logado.")
-                else:
-                    login()
-            elif input_escolha == "2":
-                cadastrar_usuario()
+            if usuario_logado:
+                menu_conta()
             else:
-                print("Opção inválida. Tente novamente.")
+                print("\n=== LOGIN ===")
+                print("1 - Entrar")
+                print("2 - Criar conta")
+                input_escolha = input("Escolha uma opção: ")
+                if input_escolha == "1":
+                    if usuario_logado:
+                        print("Você já está logado.")
+                    else:
+                        login()
+                elif input_escolha == "2":
+                    cadastrar_usuario()
+                else:
+                    print("Opção inválida. Tente novamente.")
         elif escolha == "2":
             if usuario_logado:
                 ver_eventos()
@@ -39,6 +42,44 @@ def menu_principal():
         else:
             print("Opção inválida. Tente novamente.")
 
+
+def menu_conta():
+    print("\n=== MENU DE CONTA ===")
+    print(f"Nome: {usuario_logado['nome']}")
+    print(f"Email: {usuario_logado['email']}")
+    print(f"CPF: {usuario_logado['cpf']}")
+    print(f"Telefone: {usuario_logado['telefone']}")
+    print(f"CEP: {usuario_logado['cep']}")
+    print("1 - Atualizar conta")
+    print("2 - Deletar conta")
+    print("3 - Voltar ao menu principal")
+    escolha = input("Escolha uma opção: ")
+
+    if escolha == "1":
+        atualizar_conta()
+    elif escolha == "2":
+        deletar_conta()
+    elif escolha == "3":
+        return
+    else:
+        print("Opção inválida. Tente novamente.")
+
+
+def atualizar_conta():
+    response = requests.put("http://localhost:8000/usuarios/"+usuario_logado["email"], json=usuario_logado)
+    if response.status_code == 200:
+        print("✅ Conta atualizada com sucesso!")
+        usuario_logado = response.json()  # Atualiza o usuário logado com os novos dados
+    else:
+        print("❌ Erro ao atualizar conta. Tente novamente.")
+
+def deletar_conta():
+    response = requests.delete("http://localhost:8000/usuarios/"+usuario_logado["id_usuario"])
+    if response.status_code == 200:
+        print("✅ Conta deletada com sucesso!")
+        usuario_logado = None  # Limpa o usuário logado
+    else:
+        print("❌ Erro ao deletar conta. Tente novamente.")
 
 def login():
     global usuario_logado
