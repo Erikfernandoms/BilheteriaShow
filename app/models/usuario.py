@@ -19,4 +19,3 @@ class UsuarioOut(UsuarioBase):
     cpf: str
     telefone: str
     cep: str
-    criado_em: str

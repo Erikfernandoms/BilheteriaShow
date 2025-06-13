@@ -25,7 +25,7 @@ def criar_usuario(conn, usuario):
         "cep": usuario.cep
     }
 
-def obter_usuario(conn, usuario_email: int):
+def obter_usuario(conn, usuario_email: str):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM usuario WHERE email = ?", (usuario_email,))
     usuario = cursor.fetchone()
@@ -63,7 +63,7 @@ def atualizar_usuario(conn, usuario_id: int, dados):
         "senha": dados.senha,
         "telefone": dados.telefone,
         "cep": dados.cep
-    }
+        }
 
 def deletar_usuario(conn, usuario_id: int):
     cursor = conn.cursor()
