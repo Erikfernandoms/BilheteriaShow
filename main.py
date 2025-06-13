@@ -9,10 +9,10 @@ usuario_logado = None
 def menu_principal():
     while True:
         print("\n=== SISTEMA DE BILHETAGEM ===")
-        print("1 - Conta")
-        print("2 - Ver eventos")
+        print("\n1 - Conta")
+        print("2 - Eventos")
         print("3 - Sair")
-        escolha = input("Escolha uma opção: ")
+        escolha = input("\nEscolha uma opção: ")
 
         if escolha == "1":
             if usuario_logado:
@@ -21,39 +21,36 @@ def menu_principal():
                 print("\n=== LOGIN ===")
                 print("1 - Entrar")
                 print("2 - Criar conta")
-                input_escolha = input("Escolha uma opção: ")
+                input_escolha = input("\nEscolha uma opção: ")
                 if input_escolha == "1":
                     if usuario_logado:
-                        print("Você já está logado.")
+                        print("\nVocê já está logado.")
                     else:
                         login()
                 elif input_escolha == "2":
                     cadastrar_usuario()
                 else:
-                    print("Opção inválida. Tente novamente.")
+                    print("\nOpção inválida. Tente novamente.")
         elif escolha == "2":
-            if usuario_logado:
-                ver_eventos()
-            else:
-                print("⚠️ Você precisa estar logado para ver os eventos.")
+            eventos()
         elif escolha == "3":
-            print("Saindo...")
+            print("\nSaindo...")
             sys.exit()
         else:
-            print("Opção inválida. Tente novamente.")
+            print("\nOpção inválida. Tente novamente.")
 
 
 def menu_conta():
     print("\n=== MENU DE CONTA ===")
-    print(f"Nome: {usuario_logado['nome']}")
+    print(f"\nNome: {usuario_logado['nome']}")
     print(f"Email: {usuario_logado['email']}")
     print(f"CPF: {usuario_logado['cpf']}")
     print(f"Telefone: {usuario_logado['telefone']}")
     print(f"CEP: {usuario_logado['cep']}")
-    print("1 - Atualizar conta")
+    print("\n1 - Atualizar conta")
     print("2 - Deletar conta")
     print("3 - Voltar ao menu principal")
-    escolha = input("Escolha uma opção: ")
+    escolha = input("\nEscolha uma opção: ")
 
     if escolha == "1":
         atualizar_conta()
@@ -62,13 +59,13 @@ def menu_conta():
     elif escolha == "3":
         return
     else:
-        print("Opção inválida. Tente novamente.")
+        print("\nOpção inválida. Tente novamente.")
 
 
 def atualizar_conta():
     global usuario_logado
     print("\n=== ATUALIZAR CONTA ===")
-    print("Deixe o campo vazio se não quiser alterar.")
+    print("\nDeixe o campo vazio se não quiser alterar.")
     nome = input(f"Nome ({usuario_logado['nome']}): ") or usuario_logado['nome']
     email = input(f"Email ({usuario_logado['email']}): ") or usuario_logado['email']
     senha = input(f"Senha ({usuario_logado['senha']}): ") or usuario_logado['senha']
@@ -86,11 +83,11 @@ def atualizar_conta():
     id = usuario_logado["id_usuario"]
     response = requests.put(f"http://localhost:8000/usuarios/{id}", json=usuario_logado_alterado)
     if response.status_code == 200:
-        print("✅ Conta atualizada com sucesso!")
+        print("\n✅ Conta atualizada com sucesso!")
         usuario_logado = response.json()
         return
     else:
-        print("❌ Erro ao atualizar conta. Tente novamente.")
+        print("\n❌ Erro ao atualizar conta. Tente novamente.")
         return
 
 def deletar_conta():
@@ -98,31 +95,31 @@ def deletar_conta():
     id = usuario_logado["id_usuario"]
     response = requests.delete(f"http://localhost:8000/usuarios/{id}")
     if response.status_code == 200:
-        print("✅ Conta deletada com sucesso!")
+        print("\n✅ Conta deletada com sucesso!")
         usuario_logado = None
         return
     else:
-        print("❌ Erro ao deletar conta. Tente novamente.")
+        print("\n❌ Erro ao deletar conta. Tente novamente.")
         return
 
 def login():
     global usuario_logado
-    email = input("Digite o seu email: ")
+    email = input("\nDigite o seu email: ")
     
     response = requests.get("http://localhost:8000/usuarios/"+email)
     if response.status_code == 200:
         usuarios = response.json()
-        senha = input("Digite a sua senha: ")
+        senha = input("\nDigite a sua senha: ")
         if senha != usuarios["senha"]:
             print("❌ Senha incorreta.")
             return
         else:
             nome = usuarios["nome"]
-            print(f"✅ Bem-vindo, {nome}!")
+            print(f"\n✅ Bem-vindo, {nome}!")
             usuario_logado = usuarios
             return
     else:
-        print("❌ Usuário não encontrado.")
+        print("\n❌ Usuário não encontrado.")
         return
     
 def cadastrar_usuario():
@@ -145,14 +142,41 @@ def cadastrar_usuario():
     response = requests.post("http://localhost:8000/usuarios/", json=usuario_data)
     
     if response.status_code in (201, 200):
-        print("✅ Conta criada com sucesso!")
+        print("\n✅ Conta criada com sucesso!")
         return
     else:
-        print("❌ Erro ao criar conta. Verifique os dados e tente novamente.")
+        print("\n❌ Erro ao criar conta. Verifique os dados e tente novamente.")
         return
 
-def ver_eventos():
-    pass
+def eventos():
+    global usuario_logado
+    response = requests.get("http://localhost:8000/eventos/")
+    if response.status_code == 200:
+        eventos = response.json()
+        if not eventos:
+            print("\n⚠️ Nenhum evento encontrado.")
+            return
+        print("\n=== EVENTOS ===")
+        for evento in eventos:
+            print("\n--------------------")
+            print(f"ID: {evento['id_evento']}")
+            print(f"Nome: {evento['nome']}")
+            print(f"Descrição: {evento['descricao']}")
+            print(f"Data: {evento['data']}")
+            print(f"Local: {evento['local']}")
+        
+        print("\nDeseja comprar um ingresso para algum evento?")
+        escolha = input("Digite 's' para sim ou qualquer outra tecla para voltar: ")
+        if escolha.lower() == 's':
+            if usuario_logado:
+                evento = input(f"\nOlá, {usuario_logado['nome']}! Digite o ID do evento que deseja comprar ingresso: ")
+                print("Setores Disponíveis:")
+                return
+            else:
+                print("\n⚠️ Você precisa estar logado para comprar ingressos.")
+        return
+    else:
+        print("\n❌ Erro ao buscar eventos. Tente novamente.")
   
 
 if __name__ == "__main__":

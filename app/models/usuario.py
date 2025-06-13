@@ -8,9 +8,6 @@ class UsuarioBase(BaseModel):
     telefone: str
     cep: str
 
-class UsuarioCreate(UsuarioBase):
-    pass
-
 
 class UsuarioOut(UsuarioBase):
     id_usuario: int

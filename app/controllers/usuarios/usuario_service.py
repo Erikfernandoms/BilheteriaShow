@@ -1,8 +1,3 @@
-
-#from app.models.usuario import Usuario
-#from app.schemas.usuario import UsuarioCreate
-
-
 def listar_usuarios(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM usuario")
