@@ -61,9 +61,10 @@ def init_db():
         status TEXT,
         setor TEXT,
         cadeira TEXT,
+        quantidade_ingressos INTEGER,
         reservado_ate TIMESTAMP,
         valor_total NUMERIC(10,2),
-        criado_em TIMESTAMP,
+        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         atualizado_em TIMESTAMP,
         FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
         FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
@@ -84,7 +85,7 @@ def init_db():
     );
     """)
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS produto_do_Pedido (
+    CREATE TABLE IF NOT EXISTS produto_do_pedido (
         id_pedido INTEGER NOT NULL,
         id_produto INTEGER NOT NULL,
         quantidade INTEGER,

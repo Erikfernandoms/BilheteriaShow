@@ -1,7 +1,3 @@
-
-
-
-
 def listar_eventos(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM evento")

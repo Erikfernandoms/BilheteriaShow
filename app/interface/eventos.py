@@ -1,4 +1,5 @@
 import requests
+from app.interface.pedido import reserva_ingresso
 
 def menu_eventos(usuario_logado):
     response = requests.get("http://localhost:8000/eventos/")
@@ -25,7 +26,7 @@ def menu_eventos(usuario_logado):
                 response = requests.get(f"http://localhost:8000/eventos/{evento_id}")
                 if response.status_code == 200: 
                     evento = response.json()
-                menu_setores(evento_id, evento)
+                menu_setores(evento_id, evento, usuario_logado)
             else:
                 print("\n⚠️ Você precisa estar logado para comprar ingressos.")
         return
@@ -35,7 +36,7 @@ def menu_eventos(usuario_logado):
 
 
 
-def menu_setores(evento_id, evento):
+def menu_setores(evento_id, evento, usuario_logado):
     response = requests.get(f"http://localhost:8000/eventos/setores/{evento_id}")
     if response.status_code != 200:
         print("\n❌ Erro ao buscar setores do evento. Tente novamente.")
@@ -54,7 +55,7 @@ def menu_setores(evento_id, evento):
     if quantidade is None:
         return
 
-    reserva_ingresso(evento_id, setor['id_setor_evento'], quantidade)
+    reserva_ingresso(usuario_logado, evento, setor, quantidade)
 
 
 def escolher_setor(setores, evento):
@@ -102,8 +103,4 @@ def escolher_quantidade(setor):
             print("❌ Não há ingressos suficientes disponíveis.")
         else:
             return quantidade
-
-
-def reserva_ingresso(evento_id, setor_id, quantidade):
-    pass
     

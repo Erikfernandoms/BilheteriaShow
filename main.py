@@ -3,7 +3,7 @@ from app.interface.eventos import menu_eventos
 from app.interface.conta import cadastrar_usuario
 
 from app.interface.conta import login
-from app.repository.init_db import init_db
+from app.database.init_db import init_db
 import sys
 
 def menu_principal(usuario_logado):
