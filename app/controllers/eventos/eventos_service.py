@@ -9,7 +9,30 @@ def listar_eventos(conn):
     eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
     return eventos
 
+def listar_setores_eventos(conn, id_evento: int):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM setor_evento where id_evento = ?", (id_evento,))
+    colunas = [desc[0] for desc in cursor.description]
+    eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
+    return eventos
 
+def obter_evento(conn, evento_id: int):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM evento WHERE id_evento = ?", (evento_id,))
+    evento = cursor.fetchone()
+    
+    if evento:
+        colunas = [desc[0] for desc in cursor.description]
+        return dict(zip(colunas, evento))
+    else:
+        return None
+
+def obter_setores_eventos(conn, setor_id: int):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM setor_evento WHERE id_setor_evento = ?", (setor_id,))
+    colunas = [desc[0] for desc in cursor.description]
+    setores_eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
+    return setores_eventos
 
 def criar_evento(conn, evento):
     cursor = conn.cursor()

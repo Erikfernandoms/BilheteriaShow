@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 import sqlite3
 from typing import List
-from app.controllers.eventos.eventos_service import listar_eventos, criar_evento,  atualizar_evento, deletar_evento
-from app.models.evento import EventoOut, EventoBase
+from app.controllers.eventos.eventos_service import listar_eventos, criar_evento, obter_evento, atualizar_evento, deletar_evento, listar_setores_eventos, obter_setores_eventos
+from app.models.evento import EventoOut, EventoBase, SetorEventoOut
 
 router = APIRouter()
 def get_db():
@@ -11,6 +11,27 @@ def get_db():
         yield conn
     finally:
         conn.close()
+
+@router.get("/setores/{evento_id}", response_model=List[SetorEventoOut])
+def listar_setores(evento_id: int, db = Depends(get_db)):
+    setores_eventos = listar_setores_eventos(db, evento_id)
+    if not setores_eventos:
+        raise HTTPException(status_code=404, detail="Nenhum setor de evento encontrado")
+    return setores_eventos
+
+@router.get("/setor/{setor_id}", response_model=SetorEventoOut)
+def lista_setor(setor_id: int, db = Depends(get_db)):
+    setores_eventos = obter_setores_eventos(db, setor_id)
+    if not setores_eventos:
+        raise HTTPException(status_code=404, detail="Setor de evento não encontrado")
+    return setores_eventos[0]
+
+@router.get("/{evento_id}", response_model=EventoOut)
+def lista_evento(evento_id: int, db = Depends(get_db)):     
+    evento = obter_evento(db, evento_id)
+    if not evento:
+        raise HTTPException(status_code=404, detail="Evento não encontrado")
+    return EventoOut(**evento)
 
 @router.get("/", response_model=List[EventoOut])
 def listar(db = Depends(get_db)):

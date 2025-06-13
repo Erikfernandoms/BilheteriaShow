@@ -13,3 +13,17 @@ class EventoOut(EventoBase):
     local: str
     data: str
     criado_em: str
+
+
+class SetorEventoBase(BaseModel):
+    nome: str
+    quantidade_lugares: int
+    preco_base: float
+
+
+class SetorEventoOut(SetorEventoBase):
+    id_setor_evento: int
+    nome: str
+    quantidade_lugares: int
+    preco_base: float
+    id_evento: int
