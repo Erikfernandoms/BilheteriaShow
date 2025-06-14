@@ -1,3 +1,6 @@
+from logger import log_info, log_error
+from metrics import incrementar_metrica
+
 def listar_produtos(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM produto")
@@ -82,6 +85,8 @@ def adicionar_produto_pedido(conn, pedido_id: int, id_produto: int, quantidade: 
     """, (valor_adicional, pedido_id))
 
     conn.commit()
+    incrementar_metrica("produtos_adicionados_pedido")
+    log_info(f"Produto {id_produto} adicionado ao pedido {pedido_id} com quantidade {quantidade}.")
     return {
         "id_pedido_produto": cursor.lastrowid,
         "id_pedido": pedido_id,

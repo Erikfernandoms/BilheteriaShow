@@ -1,0 +1,6 @@
+2025-06-14 18:30:18,645 [INFO] Usuário erik (1) logado com sucesso.
+2025-06-14 18:31:08,790 [INFO] Pedido criado com sucesso: 3, Evento: 1, Setor: 3, Quantidade: 3
+2025-06-14 18:31:19,147 [INFO] Produto 1 adicionado ao pedido 10 com quantidade 1.
+2025-06-14 18:31:22,827 [INFO] Produto 2 adicionado ao pedido 10 com quantidade 1.
+2025-06-14 18:31:43,625 [INFO] Nota fiscal gerada para o pedido 10: notas_fiscais\nota_10.json
+2025-06-14 18:31:43,626 [INFO] Pagamento aprovado para o pedido 10. Nota fiscal gerada.

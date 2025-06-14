@@ -1,5 +1,8 @@
 from datetime import datetime
 
+from logger import log_info, log_error
+from metrics import incrementar_metrica
+
 def criar_pedido(conn, pedido):
     cursor = conn.cursor()
     try:
@@ -23,6 +26,7 @@ def criar_pedido(conn, pedido):
         row = cursor.fetchone()
         if not row or row[0] < pedido.quantidade_ingressos:
             conn.rollback()
+            log_error(f"Ingressos insuficientes para o setor {pedido.id_setor_evento}. Disponíveis: {row[0] if row else 0}, Solicitados: {pedido.quantidade_ingressos}")
             return {"erro": "Ingressos insuficientes para o setor selecionado."}
 
         cursor.execute("""
@@ -47,6 +51,8 @@ def criar_pedido(conn, pedido):
         ))
 
         conn.commit()
+        log_info(f"Pedido criado com sucesso: {pedido.id_usuario}, Evento: {pedido.id_evento}, Setor: {pedido.id_setor_evento}, Quantidade: {pedido.quantidade_ingressos}")
+        incrementar_metrica("pedidos_criados")
         return {
             "id_pedido": cursor.lastrowid,
             "id_usuario": pedido.id_usuario,
@@ -206,4 +212,9 @@ def cancelar_reservas_expiradas(conn):
                 WHERE id_produto = ?
             """, (quantidade, id_produto))
 
+        incrementar_metrica("pedidos_expirados")
+    if expirados:
+        log_info(f"Pedidos expirados: {', '.join(str(p[0]) for p in expirados)}")
+        log_info(f"Setores atualizados: {', '.join(str(p[1]) for p in expirados)}")
+       
     conn.commit()

@@ -1,6 +1,8 @@
 from datetime import datetime
 import random 
 from app.controllers.notas_fiscais.nota_fiscal_service import gerar_nota_fiscal
+from logger import log_info, log_error
+from metrics import incrementar_metrica
 
 def registrar_pagamento(conn, pagamento):
     cursor = conn.cursor()
@@ -21,6 +23,11 @@ def registrar_pagamento(conn, pagamento):
     conn.commit()
     if pagamento.status == "aprovado":
         gerar_nota_fiscal(conn, pagamento.id_pedido)
+        log_info(f"Pagamento aprovado para o pedido {pagamento.id_pedido}. Nota fiscal gerada.")
+        incrementar_metrica("pagamentos_aprovados")
+    else:
+        log_error(f"Pagamento recusado para o pedido {pagamento.id_pedido}.")
+        incrementar_metrica("pagamentos_recusados")
     return {
         "id_pagamento": cursor.lastrowid,
         "id_pedido": pagamento.id_pedido,
