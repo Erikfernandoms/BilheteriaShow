@@ -8,7 +8,6 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from contextlib import asynccontextmanager
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     FastAPICache.init(InMemoryBackend())

@@ -110,7 +110,10 @@ def init_db():
     CREATE TABLE IF NOT EXISTS nota_fiscal (
         id_nota INTEGER PRIMARY KEY AUTOINCREMENT,
         id_pedido INTEGER NOT NULL,
+        id_pagamento INTEGER NOT NULL,
         link_s3 TEXT,
+        valor_total NUMERIC(10,2),
+        numero TEXT UNIQUE,
         emitida_em TIMESTAMP,
         FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
     );""")

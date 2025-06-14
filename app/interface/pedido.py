@@ -160,7 +160,7 @@ def finalizar_pagamento(id_pedido):
 
     print("\nProcessando pagamento...")
     response = requests.post("http://localhost:8000/pagamentos/mock")
-    status_pagamento = "aprovado" if response.status_code == 200 and response.json().get("status") == "aprovado" else "recusado"
+    status_pagamento = "aprovado" if response.status_code == 200 and response.json()["status"] == "aprovado" else "recusado"
 
     pedido_resp = requests.get(f"http://localhost:8000/pedidos/{id_pedido}")
     if pedido_resp.status_code == 200:
