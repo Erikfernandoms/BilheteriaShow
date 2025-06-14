@@ -89,7 +89,7 @@ def atualizar_pedido(conn, pedido_id, dados):
     cursor = conn.cursor()
     cursor.execute("""
         UPDATE pedido
-        SET id_usuario = ?, id_evento = ?, id_setor_evento = ?, status = ?, setor = ?, cadeira = ?, reservado_ate = ?, valor_total = ?
+        SET id_usuario = ?, id_evento = ?, id_setor_evento = ?, status = ?, setor = ?, cadeira = ?, reservado_ate = ?, valor_total = ?, atualizado_em = CURRENT_TIMESTAMP
         WHERE id_pedido = ?
     """, (dados.id_usuario,
         dados.id_evento,
@@ -115,7 +115,8 @@ def atualizar_pedido(conn, pedido_id, dados):
         "setor": dados.setor,
         "cadeira": dados.cadeira,
         "reservado_ate": dados.reservado_ate,
-        "valor_total": dados.valor_total
+        "valor_total": dados.valor_total,
+        "quantidade_ingressos": dados.quantidade_ingressos
     }
 
 def deletar_pedido(conn, pedido_id):
@@ -168,14 +169,13 @@ def cancelar_reservas_expiradas(conn):
         if datetime.strptime(pedido[1], "%Y-%m-%d %H:%M:%S") < agora
     ]
 
-    data_atualizacao = agora.strftime("%Y-%m-%d %H:%M:%S")
     for id_pedido, id_setor_evento, quantidade_ingressos in expirados:
         cursor.execute("""
             UPDATE pedido
             SET status = 'expirado'
-            , atualizado_em = ?
+            , atualizado_em = CURRENT_TIMESTAMP
             WHERE id_pedido = ?
-        """, (data_atualizacao, id_pedido))
+        """, (id_pedido,))
 
         cursor.execute("""
             UPDATE setor_evento
