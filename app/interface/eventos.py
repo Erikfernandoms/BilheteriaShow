@@ -1,12 +1,13 @@
 import requests
 from app.interface.pedido import reserva_ingresso
+from app.interface.pedido import listar_pedidos
 
 def menu_eventos(usuario_logado):
     response = requests.get("http://localhost:8000/eventos/")
     if response.status_code == 200:
         eventos = response.json()
         if not eventos:
-            print("\n⚠️ Nenhum evento encontrado.")
+            print("\nNenhum evento encontrado.")
             return
         print("\n=== EVENTOS ===")
         for evento in eventos:
@@ -16,11 +17,18 @@ def menu_eventos(usuario_logado):
             print(f"Descrição: {evento['descricao']}")
             print(f"Data: {evento['data']}")
             print(f"Local: {evento['local']}")
-        
 
-        print("\nDeseja comprar um ingresso para algum evento?")
-        escolha = input("Digite 's' para sim ou qualquer outra tecla para voltar: ")
-        if escolha.lower() == 's':
+        print("\n--------------------")
+        print("1. Ver meus pedidos")
+        print("2. Deseja comprar um ingresso para algum evento?")
+
+        escolha = input("Escolha uma opção: ")
+        if escolha.lower() == '1':
+            if usuario_logado:
+                listar_pedidos(usuario_logado)
+            else:
+                print("\nVocê precisa estar logado para ver seus pedidos.")
+        elif escolha.lower() == '2':
             if usuario_logado:
                 evento_id = input(f"\nOlá, {usuario_logado['nome']}! Digite o ID do evento que deseja comprar ingresso: ")
                 response = requests.get(f"http://localhost:8000/eventos/{evento_id}")
@@ -28,10 +36,10 @@ def menu_eventos(usuario_logado):
                     evento = response.json()
                 menu_setores(evento_id, evento, usuario_logado)
             else:
-                print("\n⚠️ Você precisa estar logado para comprar ingressos.")
+                print("\nVocê precisa estar logado para comprar ingressos.")
         return
     else:
-        print("\n❌ Erro ao buscar eventos. Tente novamente.")
+        print("\nErro ao buscar eventos. Tente novamente.")
   
 
 
@@ -39,12 +47,12 @@ def menu_eventos(usuario_logado):
 def menu_setores(evento_id, evento, usuario_logado):
     response = requests.get(f"http://localhost:8000/eventos/setores/{evento_id}")
     if response.status_code != 200:
-        print("\n❌ Erro ao buscar setores do evento. Tente novamente.")
+        print("\nErro ao buscar setores do evento. Tente novamente.")
         return
 
     setores_eventos = response.json()
     if not setores_eventos:
-        print("\n⚠️ Nenhum setor de evento encontrado.")
+        print("\nNenhum setor de evento encontrado.")
         return
 
     setor = escolher_setor(setores_eventos, evento)
@@ -63,7 +71,7 @@ def escolher_setor(setores, evento):
     setores_disponiveis = [s for s in setores if s['quantidade_lugares'] > 0]
 
     if not setores_disponiveis:
-        print("\n⚠️ Todos os setores estão esgotados.")
+        print("\nTodos os setores estão esgotados.")
         return None
 
     for setor in setores_disponiveis:
@@ -81,26 +89,26 @@ def escolher_setor(setores, evento):
         response = requests.get(f"http://localhost:8000/eventos/setor/{setor_id}")
         if response.status_code == 200:
             setor = response.json()
-            print(f"\n✅ Setor selecionado: {setor['nome']}")
+            print(f"\nSetor selecionado: {setor['nome']}")
             return setor
         else:
-            print("❌ Setor inválido. Tente novamente.")
+            print("Setor inválido. Tente novamente.")
 
 
 def escolher_quantidade(setor):
     while True:
         quantidade = input("Digite a quantidade de ingressos (máx. 2): ")
         if not quantidade.isdigit():
-            print("❌ Digite um número válido.")
+            print("Digite um número válido.")
             continue
 
         quantidade = int(quantidade)
         if quantidade <= 0:
-            print("❌ A quantidade deve ser maior que zero.")
+            print("A quantidade deve ser maior que zero.")
         elif quantidade > 2:
-            print("⚠️ Limite de 2 ingressos por compra.")
+            print("Limite de 2 ingressos por compra.")
         elif quantidade > setor['quantidade_lugares']:
-            print("❌ Não há ingressos suficientes disponíveis.")
+            print("Não há ingressos suficientes disponíveis.")
         else:
             return quantidade
     

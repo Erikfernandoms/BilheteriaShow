@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 import sqlite3
 from typing import List
-from app.controllers.pedidos.pedidos_service import criar_pedido, atualizar_pedido, deletar_pedido, listar_pedidos
+from app.controllers.pedidos.pedidos_service import criar_pedido, atualizar_pedido, deletar_pedido, listar_pedidos, listar_pedidos_usuario
 from app.models.pedido import PedidoBase, PedidoOut
 router = APIRouter()
 def get_db():
@@ -15,6 +15,13 @@ def get_db():
 @router.get("/", response_model=List[PedidoOut])
 def listar(db = Depends(get_db)):
     pedido = listar_pedidos(db)
+    if not pedido:
+        raise HTTPException(status_code=404, detail="Nenhum pedido encontrado")
+    return pedido
+
+@router.get("/{usuario_id}", response_model=List[PedidoOut])
+def listar_pedido_usuario(usuario_id:int, db = Depends(get_db)):
+    pedido = listar_pedidos_usuario(db, usuario_id)
     if not pedido:
         raise HTTPException(status_code=404, detail="Nenhum pedido encontrado")
     return pedido

@@ -3,8 +3,14 @@ from app.interface.eventos import menu_eventos
 from app.interface.conta import cadastrar_usuario
 
 from app.interface.conta import login
-from app.database.init_db import init_db
+from database.init_db import init_db
 import sys
+
+from threading import Thread
+from app.rotina.limpeza import rotina_limpeza_pedidos  # se salvar num módulo separado
+
+limpador = Thread(target=rotina_limpeza_pedidos, daemon=True)
+limpador.start()
 
 def menu_principal(usuario_logado):
     init_db()

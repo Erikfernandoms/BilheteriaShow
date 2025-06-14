@@ -37,11 +37,11 @@ def login():
             return
         else:
             nome = usuarios["nome"]
-            print(f"\n✅ Bem-vindo, {nome}!")
+            print(f"\nBem-vindo, {nome}!")
             usuario_logado = usuarios
             return usuario_logado
     else:
-        print("\n❌ Usuário não encontrado.")
+        print("\nUsuário não encontrado.")
         return 
 
 
@@ -65,11 +65,11 @@ def atualizar_conta(usuario_logado):
     id = usuario_logado["id_usuario"]
     response = requests.put(f"http://localhost:8000/usuarios/{id}", json=usuario_logado_alterado)
     if response.status_code == 200:
-        print("\n✅ Conta atualizada com sucesso!")
+        print("\nConta atualizada com sucesso!")
         usuario_logado = response.json()
         return usuario_logado
     else:
-        print("\n❌ Erro ao atualizar conta. Tente novamente.")
+        print("\nErro ao atualizar conta. Tente novamente.")
         return usuario_logado
 
 
@@ -77,11 +77,11 @@ def deletar_conta(usuario_logado):
     id = usuario_logado["id_usuario"]
     response = requests.delete(f"http://localhost:8000/usuarios/{id}")
     if response.status_code == 200:
-        print("\n✅ Conta deletada com sucesso!")
+        print("\nConta deletada com sucesso!")
         usuario_logado = None
         return usuario_logado
     else:
-        print("\n❌ Erro ao deletar conta. Tente novamente.")
+        print("\nErro ao deletar conta. Tente novamente.")
         return usuario_logado
 
 
@@ -108,8 +108,8 @@ def cadastrar_usuario():
     
 
     if response.status_code in (201, 200):
-        print("\n✅ Conta criada com sucesso!")
+        print("\nConta criada com sucesso!")
         return
     else:
-        print("\n❌ Erro ao criar conta. Verifique os dados e tente novamente.")
+        print("\nErro ao criar conta. Verifique os dados e tente novamente.")
         return

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def criar_pedido(conn, pedido):
     cursor = conn.cursor()
     cursor.execute("""
@@ -40,10 +42,11 @@ def listar_pedidos(conn):
             "status": pedido[4],
             "setor": pedido[5],
             "cadeira": pedido[6],
-            "reservado_ate": pedido[7],
-            "valor_total": pedido[8],
-            "criado_em": pedido[9],
-            "atualizado_em": pedido[10]
+            "quantidade_ingressos": pedido[7],
+            "reservado_ate": pedido[8],
+            "valor_total": pedido[9],
+            "criado_em": pedido[10],
+            "atualizado_em": pedido[11]
         } for pedido in pedidos
     ]
 
@@ -89,3 +92,52 @@ def deletar_pedido(conn, pedido_id):
         return False
 
     return True
+
+def listar_pedidos_usuario(conn, usuario_id):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM pedido WHERE id_usuario = ? and status != 'cancelado'", (usuario_id,))
+    pedidos = cursor.fetchall()
+    
+    if not pedidos:
+        return []
+
+    return [
+        {
+            "id_pedido": pedido[0],
+            "id_usuario": pedido[1],
+            "id_evento": pedido[2],
+            "id_setor_evento": pedido[3],
+            "status": pedido[4],
+            "setor": pedido[5],
+            "cadeira": pedido[6],
+            "quantidade_ingressos": pedido[7],
+            "reservado_ate": pedido[8],
+            "valor_total": pedido[9],
+
+        } for pedido in pedidos
+    ]
+
+def cancelar_reservas_expiradas(conn):
+    cursor = conn.cursor()
+    agora = datetime.now()
+
+    cursor.execute("""
+        SELECT id_pedido, reservado_ate FROM pedido
+        WHERE status = 'reservado'
+    """)
+    pedidos = cursor.fetchall()
+
+    expirados = [
+        pedido[0]
+        for pedido in pedidos
+        if datetime.strptime(pedido[1], "%Y-%m-%d %H:%M:%S") < agora
+    ]
+
+    for id_pedido in expirados:
+        cursor.execute("""
+            UPDATE pedido
+            SET status = 'expirado'
+            WHERE id_pedido = ?
+        """, (id_pedido,))
+
+    conn.commit()

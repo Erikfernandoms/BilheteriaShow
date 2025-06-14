@@ -10,7 +10,7 @@ def init_db():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS evento (
         id_evento INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome  VARCHAR(100) NOT NULL,
+        nome  VARCHAR(100) NOT NULL UNIQUE,
         descricao TEXT NOT NULL,
         local VARCHAR(100) NOT NULL,
         data TEXT NOT NULL,
@@ -25,7 +25,8 @@ def init_db():
         quantidade_lugares INTEGER,
         preco_base NUMERIC(10,2),
         id_evento INTEGER NOT NULL,
-        FOREIGN KEY (id_evento) REFERENCES evento(id_evento)
+        FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
+        UNIQUE (nome, id_evento)  on conflict ignore               
     );
     """)
 
@@ -106,27 +107,25 @@ def init_db():
     );""")
 
     # Dados iniciais
-    cursor.execute("DELETE FROM evento")
-    cursor.execute("DELETE FROM setor_evento")
-    cursor.execute("INSERT INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Show do Coldplay", "O maior show das americas", "Morumbi", "2025-12-10"))
-    cursor.execute("INSERT INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Rock in Rio", "Venha sentir essa experiência!", "Rio de Janeiro", "2025-09-20"))
-    cursor.execute("INSERT INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Pericles", "Aaaah se eu largar o freio!", "São Paulo - Allianz Parque", "2025-09-10"))
+    cursor.execute("INSERT OR IGNORE INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Show do Coldplay", "O maior show das americas", "Morumbi", "2025-12-10"))
+    cursor.execute("INSERT OR IGNORE INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Rock in Rio", "Venha sentir essa experiência!", "Rio de Janeiro", "2025-09-20"))
+    cursor.execute("INSERT OR IGNORE INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Pericles", "Aaaah se eu largar o freio!", "São Paulo - Allianz Parque", "2025-09-10"))
 
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Pista", "1000", "125.00", (SELECT id_evento FROM Evento WHERE nome = "Show do Coldplay"))""")
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Camarote", "200", "255.00", (SELECT id_evento FROM Evento WHERE nome = "Show do Coldplay"))""")
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Cadeira Superior", "500", "75.00", (SELECT id_evento FROM Evento WHERE nome = "Show do Coldplay"))""")
 
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Pista", "2000", "180.00", (SELECT id_evento FROM Evento WHERE nome = "Rock in Rio"))""")
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute(""" INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Camarote", "500", "350.00", (SELECT id_evento FROM Evento WHERE nome = "Rock in Rio"))""")
 
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Cadeira Inferior", "250", "80.00", (SELECT id_evento FROM Evento WHERE nome = "Pericles"))""")
-    cursor.execute(""" INSERT INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
+    cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Cadeira Superior", "500", "120.00", (SELECT id_evento FROM Evento WHERE nome = "Pericles"))""")
 
     conn.commit()
