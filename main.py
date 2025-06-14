@@ -8,14 +8,14 @@ import sys
 
 from threading import Thread
 from app.rotina.limpeza import rotina_limpeza_pedidos  # se salvar num módulo separado
-"""
-Rotina que limpa registros de pedidos expirados, está desativado por limitação do banco de dados SQLite!
-"""
-#limpador = Thread(target=rotina_limpeza_pedidos, daemon=True)
-#limpador.start()
 
 def menu_principal(usuario_logado):
     init_db()
+    """
+    Rotina que limpa registros de pedidos expirados, está desativado por limitação do banco de dados SQLite!
+    """
+    limpador = Thread(target=rotina_limpeza_pedidos, daemon=True)
+    limpador.start()
 
     while True:
         print("\n=== SISTEMA DE BILHETAGEM ===")

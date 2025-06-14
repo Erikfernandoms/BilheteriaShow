@@ -5,7 +5,7 @@ from app.interface.produto import oferecer_produtos
 
 def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
     data_solicitacao = datetime.now()
-    data_reserva = data_solicitacao + timedelta(minutes=15)
+    data_reserva = data_solicitacao + timedelta(minutes=1)
     response = requests.post(
         "http://localhost:8000/pedidos",
         json={

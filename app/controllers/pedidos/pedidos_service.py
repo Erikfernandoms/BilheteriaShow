@@ -168,7 +168,7 @@ def cancelar_reservas_expiradas(conn):
         for pedido in pedidos
         if datetime.strptime(pedido[1], "%Y-%m-%d %H:%M:%S") < agora
     ]
-
+    
     for id_pedido, id_setor_evento, quantidade_ingressos in expirados:
         cursor.execute("""
             UPDATE pedido
@@ -182,5 +182,17 @@ def cancelar_reservas_expiradas(conn):
             SET quantidade_lugares = quantidade_lugares + ?
             WHERE id_setor_evento = ?
         """, (quantidade_ingressos, id_setor_evento))
+
+        cursor.execute("""
+            SELECT id_produto, quantidade FROM produto_do_pedido
+            WHERE id_pedido = ?
+        """, (id_pedido,))
+        produtos = cursor.fetchall()
+        for id_produto, quantidade in produtos:
+            cursor.execute("""
+                UPDATE produto
+                SET estoque_disponivel = estoque_disponivel + ?
+                WHERE id_produto = ?
+            """, (quantidade, id_produto))
 
     conn.commit()

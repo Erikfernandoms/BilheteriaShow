@@ -77,9 +77,8 @@ def adicionar_produto_pedido(conn, pedido_id: int, id_produto: int, quantidade: 
     # Atualiza o valor_total do pedido
     valor_adicional = preco_produto * quantidade
     cursor.execute("""
-        UPDATE pedido SET valor_total = valor_total + ?,
-                   SET atualizado_em = CURRENT_TIMESTAMP
-        WHERE id_pedido = ?
+    UPDATE pedido SET valor_total = valor_total + ?, atualizado_em = CURRENT_TIMESTAMP
+    WHERE id_pedido = ?
     """, (valor_adicional, pedido_id))
 
     conn.commit()

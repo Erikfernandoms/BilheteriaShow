@@ -181,4 +181,3 @@ def init_db():
     """)
     conn.commit()
     conn.close()
-    print("Banco de dados criado e populado com sucesso.")
