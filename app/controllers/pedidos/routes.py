@@ -5,7 +5,7 @@ from app.controllers.pedidos.pedidos_service import criar_pedido, atualizar_pedi
 from app.models.pedido import PedidoBase, PedidoOut
 router = APIRouter()
 def get_db():
-    conn = sqlite3.connect("bilhetagem.db")
+    conn = sqlite3.connect("bilhetagem.db", timeout=30)
     try:
         yield conn
     finally:
@@ -27,10 +27,12 @@ def listar_pedido_usuario(usuario_id:int, db = Depends(get_db)):
     return pedido
 
 @router.post("/", response_model=PedidoOut)
-def criar(pedido: PedidoBase,db=Depends(get_db)):
+def criar(pedido: PedidoBase, db=Depends(get_db)):
     pedido_criado = criar_pedido(db, pedido)
     if not pedido_criado:
         raise HTTPException(status_code=400, detail="Erro ao criar pedido")
+    if "erro" in pedido_criado:
+        raise HTTPException(status_code=400, detail=pedido_criado["erro"])
     return pedido_criado
 
 @router.put("/{pedido_id}", response_model=PedidoBase)

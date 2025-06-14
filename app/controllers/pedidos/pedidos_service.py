@@ -2,32 +2,67 @@ from datetime import datetime
 
 def criar_pedido(conn, pedido):
     cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO pedido (id_usuario, id_evento, id_setor_evento, status, setor, cadeira, quantidade_ingressos,reservado_ate, valor_total)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (pedido.id_usuario,
-        pedido.id_evento,
-        pedido.id_setor_evento,
-        pedido.status,
-        pedido.setor,
-        pedido.cadeira,
-        pedido.quantidade_ingressos,
-        pedido.reservado_ate,
-        pedido.valor_total
-    ))
-    conn.commit()
-    return {
-        "id_pedido": cursor.lastrowid,
-        "id_usuario": pedido.id_usuario,
-        "id_evento": pedido.id_evento,
-        "id_setor_evento": pedido.id_setor_evento,
-        "setor": pedido.setor,
-        "cadeira": pedido.cadeira,
-        "quantidade_ingressos": pedido.quantidade_ingressos,
-        "valor_total": pedido.valor_total,
-        "reservado_ate": pedido.reservado_ate,
-        "status": 'solicitado'
-    }
+    try:
+        # Soma os ingressos já reservados/aprovados para o evento por esse usuário
+        cursor.execute("""
+            SELECT COALESCE(SUM(quantidade_ingressos), 0)
+            FROM pedido
+            WHERE id_usuario = ? AND id_evento = ? AND status IN ('reservado', 'pagamento aprovado')
+        """, (pedido.id_usuario, pedido.id_evento))
+        total_reservado = cursor.fetchone()[0]
+
+        if total_reservado + pedido.quantidade_ingressos > 3:
+            return {"erro": "Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos."}
+
+        conn.execute('BEGIN IMMEDIATE')
+
+        cursor.execute("""
+            SELECT quantidade_lugares 
+            FROM setor_evento 
+            WHERE id_setor_evento = ?
+        """, (pedido.id_setor_evento,))
+        row = cursor.fetchone()
+        if not row or row[0] < pedido.quantidade_ingressos:
+            conn.rollback()
+            return {"erro": "Ingressos insuficientes para o setor selecionado."}
+
+        cursor.execute("""
+            UPDATE setor_evento 
+            SET quantidade_lugares = quantidade_lugares - ?
+            WHERE id_setor_evento = ?
+        """, (pedido.quantidade_ingressos, pedido.id_setor_evento))
+
+        cursor.execute("""
+            INSERT INTO pedido (id_usuario, id_evento, id_setor_evento, status, setor, cadeira, quantidade_ingressos, reservado_ate, valor_total)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            pedido.id_usuario,
+            pedido.id_evento,
+            pedido.id_setor_evento,
+            pedido.status,
+            pedido.setor,
+            pedido.cadeira,
+            pedido.quantidade_ingressos,
+            pedido.reservado_ate,
+            pedido.valor_total
+        ))
+
+        conn.commit()
+        return {
+            "id_pedido": cursor.lastrowid,
+            "id_usuario": pedido.id_usuario,
+            "id_evento": pedido.id_evento,
+            "id_setor_evento": pedido.id_setor_evento,
+            "setor": pedido.setor,
+            "cadeira": pedido.cadeira,
+            "quantidade_ingressos": pedido.quantidade_ingressos,
+            "valor_total": pedido.valor_total,
+            "reservado_ate": pedido.reservado_ate,
+            "status": pedido.status
+        }
+    except Exception as e:
+        conn.rollback()
+        return {"erro": f"Erro ao criar pedido: {str(e)}"}
 
 def listar_pedidos(conn):
     cursor = conn.cursor()
@@ -122,22 +157,30 @@ def cancelar_reservas_expiradas(conn):
     agora = datetime.now()
 
     cursor.execute("""
-        SELECT id_pedido, reservado_ate FROM pedido
+        SELECT id_pedido, reservado_ate, id_setor_evento, quantidade_ingressos FROM pedido
         WHERE status = 'reservado'
     """)
     pedidos = cursor.fetchall()
 
     expirados = [
-        pedido[0]
+        (pedido[0], pedido[2], pedido[3])  # id_pedido, id_setor_evento, quantidade_ingressos
         for pedido in pedidos
         if datetime.strptime(pedido[1], "%Y-%m-%d %H:%M:%S") < agora
     ]
 
-    for id_pedido in expirados:
+    data_atualizacao = agora.strftime("%Y-%m-%d %H:%M:%S")
+    for id_pedido, id_setor_evento, quantidade_ingressos in expirados:
         cursor.execute("""
             UPDATE pedido
             SET status = 'expirado'
+            , atualizado_em = ?
             WHERE id_pedido = ?
-        """, (id_pedido,))
+        """, (data_atualizacao, id_pedido))
+
+        cursor.execute("""
+            UPDATE setor_evento
+            SET quantidade_lugares = quantidade_lugares + ?
+            WHERE id_setor_evento = ?
+        """, (quantidade_ingressos, id_setor_evento))
 
     conn.commit()

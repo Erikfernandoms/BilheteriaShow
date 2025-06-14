@@ -21,12 +21,16 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
         }
     )
     if response.status_code not in (200,201):
-        print("\nErro ao reservar ingresso. Tente novamente.")
+        try:
+            erro = response.json()
+            print(f"\nErro ao reservar ingresso: {erro.get('erro') or erro.get('detail') or 'Tente novamente.'}")
+        except Exception:
+            print("\nErro ao reservar ingresso. Tente novamente.")
         return
     pedido = response.json()
     id_pedido = pedido['id_pedido']
 
-
+    print("\n=== RESERVA DE INGRESSO ===")
     print(f"Pedido reservado com sucesso! ID: {id_pedido}")
     print("Você tem 15 minutos para concluir sua compra.")
     print("Agora você pode adicionar produtos ao pedido.")

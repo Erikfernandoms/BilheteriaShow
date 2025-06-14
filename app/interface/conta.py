@@ -111,5 +111,12 @@ def cadastrar_usuario():
         print("\nConta criada com sucesso!")
         return
     else:
-        print("\nErro ao criar conta. Verifique os dados e tente novamente.")
+        try:
+            erro = response.json()
+            if "cpf" in erro.get("detail", "").lower():
+                print("\nJá existe uma conta cadastrada com esse CPF.")
+            else:
+                print(f"\nErro ao criar conta: {erro.get('detail', 'Verifique os dados e tente novamente.')}")
+        except Exception:
+            print("\nErro ao criar conta. Verifique os dados e tente novamente.")
         return

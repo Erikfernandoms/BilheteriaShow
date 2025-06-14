@@ -5,7 +5,7 @@ from app.models.usuario import UsuarioBase, UsuarioOut
 
 router = APIRouter()
 def get_db():
-    conn = sqlite3.connect("bilhetagem.db")
+    conn = sqlite3.connect("bilhetagem.db", timeout=30)
     try:
         yield conn
     finally:

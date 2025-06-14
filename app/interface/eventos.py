@@ -97,7 +97,7 @@ def escolher_setor(setores, evento):
 
 def escolher_quantidade(setor):
     while True:
-        quantidade = input("Digite a quantidade de ingressos (máx. 2): ")
+        quantidade = input("Digite a quantidade de ingressos (máx. 3): ")
         if not quantidade.isdigit():
             print("Digite um número válido.")
             continue
@@ -105,8 +105,8 @@ def escolher_quantidade(setor):
         quantidade = int(quantidade)
         if quantidade <= 0:
             print("A quantidade deve ser maior que zero.")
-        elif quantidade > 2:
-            print("Limite de 2 ingressos por compra.")
+        elif quantidade > 3:
+            print("Limite de 3 ingressos por compra.")
         elif quantidade > setor['quantidade_lugares']:
             print("Não há ingressos suficientes disponíveis.")
         else:

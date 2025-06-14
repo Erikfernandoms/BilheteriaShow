@@ -75,3 +75,22 @@ def deletar_evento(conn, evento_id: int):
         return False
     return True
 
+def atualizar_setor_evento(conn, setor_id: int, dados):
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE setor_evento
+        SET nome = ?, quantidade_lugares = ?, preco_base = ?
+        WHERE id_setor_evento = ?
+    """, (dados.nome, dados.quantidade_lugares, dados.preco_base, setor_id))
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        return None
+
+    return {
+        "id_setor_evento": setor_id,
+        "nome": dados.nome,
+        "quantidade_lugares": dados.quantidade_lugares,
+        "preco_base": dados.preco_base,
+        "id_evento": dados.id_evento
+    }
