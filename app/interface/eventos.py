@@ -37,6 +37,8 @@ def menu_eventos(usuario_logado):
                 menu_setores(evento_id, evento, usuario_logado)
             else:
                 print("\nVocê precisa estar logado para comprar ingressos.")
+        else:
+            print("\nOpção inválida. Tente novamente.")
         return
     else:
         print("\nErro ao buscar eventos. Tente novamente.")
@@ -81,18 +83,19 @@ def escolher_setor(setores, evento):
         print(f"Quantidade de lugares: {setor['quantidade_lugares']}")
         print(f"Preço base: R$ {setor['preco_base']:.2f}")
 
+    ids_validos = [str(s['id_setor_evento']) for s in setores_disponiveis]
+
     while True:
         setor_id = input("\nDigite o ID do setor que deseja comprar ingresso (ou 'voltar' para cancelar): ")
         if setor_id.lower() == "voltar":
             return None
-
-        response = requests.get(f"http://localhost:8000/eventos/setor/{setor_id}")
-        if response.status_code == 200:
-            setor = response.json()
-            print(f"\nSetor selecionado: {setor['nome']}")
-            return setor
-        else:
+        if setor_id not in ids_validos:
             print("Setor inválido. Tente novamente.")
+            continue
+        # Busca o setor na lista local, não na API
+        setor = next(s for s in setores_disponiveis if str(s['id_setor_evento']) == setor_id)
+        print(f"\nSetor selecionado: {setor['nome']}")
+        return setor
 
 
 def escolher_quantidade(setor):
