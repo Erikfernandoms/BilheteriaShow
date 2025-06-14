@@ -2,6 +2,7 @@ import requests
 from app.interface.pedido import reserva_ingresso
 from app.interface.pedido import listar_pedidos
 
+
 def menu_eventos(usuario_logado):
     response = requests.get("http://localhost:8000/eventos/")
     if response.status_code == 200:

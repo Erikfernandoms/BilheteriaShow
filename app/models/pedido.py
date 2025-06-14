@@ -23,3 +23,9 @@ class PedidoOut(PedidoBase):
     quantidade_ingressos: int
     reservado_ate: str
     valor_total: float
+
+class ProdutoPedidoOut(BaseModel):
+    id_produto: int
+    nome: str
+    quantidade: int
+    preco: float

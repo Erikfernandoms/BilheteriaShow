@@ -5,6 +5,7 @@ from app.models.produto import PedidoProdutoBase, PedidoProdutoOut, ProdutoBase,
 from app.controllers.produtos.produtos_service import (
     associar_produto_ao_evento, listar_produtos, obter_produto, criar_produto, atualizar_produto, deletar_produto, adicionar_produto_pedido, listar_produtos_do_evento
 )
+from fastapi_cache.decorator import cache
 
 router = APIRouter()
 
@@ -16,10 +17,12 @@ def get_db():
         conn.close()
 
 @router.get("/", response_model=List[ProdutoOut])
+@cache(expire=300)
 def listar(db=Depends(get_db)):
     return listar_produtos(db)
 
 @router.get("/eventos/{id_evento}/produtos", response_model=List[ProdutoOut])
+@cache(expire=300)
 def produtos_do_evento(id_evento: int, db=Depends(get_db)):
     return listar_produtos_do_evento(db, id_evento)
 

@@ -21,3 +21,5 @@ class PedidoProdutoOut(PedidoProdutoBase):
 class ProdutoEventoBase(BaseModel):
     id_evento: int
     id_produto: int
+
+

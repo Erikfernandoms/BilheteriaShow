@@ -3,6 +3,7 @@ import sqlite3
 from typing import List
 from app.controllers.eventos.eventos_service import listar_eventos, atualizar_setor_evento, criar_evento, obter_evento, atualizar_evento, deletar_evento, listar_setores_eventos, obter_setores_eventos
 from app.models.evento import EventoOut, EventoBase, SetorEventoOut
+from fastapi_cache.decorator import cache
 
 router = APIRouter()
 def get_db():
@@ -13,6 +14,7 @@ def get_db():
         conn.close()
 
 @router.get("/setores/{evento_id}", response_model=List[SetorEventoOut])
+@cache(expire=300)
 def listar_setores(evento_id: int, db = Depends(get_db)):
     setores_eventos = listar_setores_eventos(db, evento_id)
     if not setores_eventos:
@@ -34,6 +36,7 @@ def atualizar_setor(setor_id: int, dados: SetorEventoOut, db = Depends(get_db)):
     return setor_evento
 
 @router.get("/{evento_id}", response_model=EventoOut)
+@cache(expire=300)
 def lista_evento(evento_id: int, db = Depends(get_db)):     
     evento = obter_evento(db, evento_id)
     if not evento:
@@ -41,6 +44,7 @@ def lista_evento(evento_id: int, db = Depends(get_db)):
     return EventoOut(**evento)
 
 @router.get("/", response_model=List[EventoOut])
+@cache(expire=300)
 def listar(db = Depends(get_db)):
     eventos = listar_eventos(db)
     if not eventos:

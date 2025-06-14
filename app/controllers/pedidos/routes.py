@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 import sqlite3
 from typing import List
-from app.controllers.pedidos.pedidos_service import criar_pedido, atualizar_pedido, deletar_pedido, listar_pedidos, listar_pedidos_usuario
-from app.models.pedido import PedidoBase, PedidoOut
+from app.controllers.pedidos.pedidos_service import criar_pedido, listar_produtos_do_pedido, atualizar_pedido, deletar_pedido, listar_pedidos, listar_pedidos_usuario
+from app.models.pedido import PedidoBase, PedidoOut, ProdutoPedidoOut
+import random
+
 router = APIRouter()
 def get_db():
     conn = sqlite3.connect("bilhetagem.db", timeout=30)
@@ -11,6 +13,19 @@ def get_db():
     finally:
         conn.close()
 
+@router.post("/{pedido_id}/pagar")
+def pagar_pedido(pedido_id: int, db=Depends(get_db)):
+    cursor = db.cursor()
+    cursor.execute("UPDATE pedido SET status = 'pagamento aprovado', atualizado_em = CURRENT_TIMESTAMP WHERE id_pedido = ?", (pedido_id,))
+    db.commit()
+    return {"msg": "Pagamento confirmado"}
+
+@router.post("/{pedido_id}/recusar")
+def recusar_pagamento_pedido(pedido_id: int, db=Depends(get_db)):
+    cursor = db.cursor()
+    cursor.execute("UPDATE pedido SET status = 'pagamento recusado', atualizado_em = CURRENT_TIMESTAMP WHERE id_pedido = ?", (pedido_id,))
+    db.commit()
+    return {"msg": "Pagamento recusado"}
 
 @router.get("/", response_model=List[PedidoOut])
 def listar(db = Depends(get_db)):
@@ -48,3 +63,10 @@ def deletar(pedido_id: int, db = Depends(get_db)):
     if not sucesso:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return {"message": "Pedido deletado com sucesso"}
+
+@router.get("/{pedido_id}/produtos", response_model=List[ProdutoPedidoOut])
+def produtos_do_pedido(pedido_id: int, db=Depends(get_db)):
+    produtos = listar_produtos_do_pedido(db, pedido_id)
+    if produtos is None:
+        raise HTTPException(status_code=404, detail="Pedido não encontrado")
+    return produtos

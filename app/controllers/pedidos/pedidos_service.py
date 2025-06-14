@@ -85,6 +85,17 @@ def listar_pedidos(conn):
         } for pedido in pedidos
     ]
 
+def listar_produtos_do_pedido(conn, id_pedido: int):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT p.id_produto, p.nome, pp.quantidade, pp.preco, p.estoque_disponivel, p.ativo
+        FROM produto_do_pedido pp
+        JOIN produto p ON p.id_produto = pp.id_produto
+        WHERE pp.id_pedido = ?
+    """, (id_pedido,))
+    colunas = [desc[0] for desc in cursor.description]
+    return [dict(zip(colunas, row)) for row in cursor.fetchall()]
+
 def atualizar_pedido(conn, pedido_id, dados):
     cursor = conn.cursor()
     cursor.execute("""
