@@ -1,7 +1,5 @@
-
-#from app.models.usuario import Usuario
-#from app.schemas.usuario import UsuarioCreate
-
+import sqlite3
+from fastapi import HTTPException
 
 def listar_usuarios(conn):
     cursor = conn.cursor()
@@ -11,21 +9,29 @@ def listar_usuarios(conn):
 
 def criar_usuario(conn, usuario):
     cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO usuario (nome, email, cpf, senha, telefone, cep)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (usuario.nome, usuario.email, usuario.cpf, usuario.senha, usuario.telefone, usuario.cep))
-    conn.commit()
-    return {
-        "nome": usuario.nome,
-        "email": usuario.email,
-        "cpf": usuario.cpf,
-        "senha": usuario.senha,
-        "telefone": usuario.telefone,
-        "cep": usuario.cep
-    }
+    try:
+        cursor.execute("""
+            INSERT INTO usuario (nome, email, cpf, senha, telefone, cep)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (usuario.nome, usuario.email, usuario.cpf, usuario.senha, usuario.telefone, usuario.cep))
+        conn.commit()
+        return {
+            "id_usuario": cursor.lastrowid,
+            "nome": usuario.nome,
+            "email": usuario.email,
+            "cpf": usuario.cpf,
+            "senha": usuario.senha,
+            "telefone": usuario.telefone,
+            "cep": usuario.cep
+        }
+    except sqlite3.IntegrityError as e:
+        if "cpf" in str(e).lower():
+            raise HTTPException(status_code=400, detail="Já existe um usuário cadastrado com esse CPF.")
+        if "email" in str(e).lower():
+            raise HTTPException(status_code=400, detail="Já existe um usuário cadastrado com esse e-mail.")
+        raise HTTPException(status_code=400, detail="Erro ao criar usuário: dados duplicados.")
 
-def obter_usuario(conn, usuario_email: int):
+def obter_usuario(conn, usuario_email: str):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM usuario WHERE email = ?", (usuario_email,))
     usuario = cursor.fetchone()
@@ -63,7 +69,7 @@ def atualizar_usuario(conn, usuario_id: int, dados):
         "senha": dados.senha,
         "telefone": dados.telefone,
         "cep": dados.cep
-    }
+        }
 
 def deletar_usuario(conn, usuario_id: int):
     cursor = conn.cursor()
