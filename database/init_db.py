@@ -80,8 +80,8 @@ def init_db():
         status TEXT,
         metodo_pagamento TEXT,
         valor_total NUMERIC(10,2),
-        data_criacao DATE,
-        data_confirmacao DATE NOT NULL,
+        data_criacao DATE DEFAULT CURRENT_TIMESTAMP,
+        data_confirmacao DATE,
         FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
     );
     """)

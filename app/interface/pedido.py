@@ -53,7 +53,7 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
             print("Opção inválida.")
 
 def listar_pedidos(usuario_logado):
-    response = requests.get(f"http://localhost:8000/pedidos/{usuario_logado['id_usuario']}")
+    response = requests.get(f"http://localhost:8000/pedidos/{usuario_logado['id_usuario']}/usuarios")
     if response.status_code == 404:
         print("\nVocê ainda não possui pedidos.")
         return
@@ -86,7 +86,7 @@ def menu_pagamento(pedidos_pendentes):
     while True:
         usuario_id = pedidos_pendentes[0]['id_usuario'] if pedidos_pendentes else None
         if usuario_id:
-            response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}")
+            response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
             if response.status_code == 200:
                 pedidos = response.json()
                 pedidos_pendentes = [p for p in pedidos if p['status'] == 'reservado']
@@ -100,7 +100,6 @@ def menu_pagamento(pedidos_pendentes):
 
         print("\nPedidos pendentes de pagamento:")
         for pedido in pedidos_pendentes:
-            # Buscar nome do evento
             evento_resp = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")
             nome_evento = evento_resp.json()['nome'] if evento_resp.status_code == 200 else f"Evento {pedido['id_evento']}"
 
@@ -109,7 +108,6 @@ def menu_pagamento(pedidos_pendentes):
             print(f"Ingressos: {pedido['quantidade_ingressos']}")
             print(f"Total: R${pedido['valor_total']:.2f}")
 
-            # Buscar produtos do pedido
             produtos_resp = requests.get(f"http://localhost:8000/pedidos/{pedido['id_pedido']}/produtos")
             if produtos_resp.status_code == 200:
                 produtos = produtos_resp.json()
@@ -129,22 +127,60 @@ def menu_pagamento(pedidos_pendentes):
             id_pedido = int(escolha)
             if any(pedido['id_pedido'] == id_pedido for pedido in pedidos_pendentes):
                 finalizar_pagamento(id_pedido)
+                
+                response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
+                if response.status_code == 200:
+                    pedidos = response.json()
+                    pedidos_pendentes = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
+                    if not pedidos_pendentes:
+                        print("\nNenhum pedido pendente de pagamento.")
+                        break
+                else:
+                    print("\nNão foi possível atualizar a lista de pedidos.")
+                    break
             else:
                 print("ID inválido.")
-        except Exception:
+        except Exception as e:
+            print(e)
             print("Entrada inválida.")
 
 def finalizar_pagamento(id_pedido):
-    print("\nProcessando pagamento...")
-    time.sleep(1)
-    response = requests.post("http://localhost:8000/pagamento/mock")
-    if response.status_code == 200 and response.json().get("status") == "aprovado":
-        response = requests.post(f"http://localhost:8000/pedidos/{id_pedido}/pagar")
-        if response.status_code == 200:
-            print("Pagamento aprovado! Sua compra está confirmada.")
+    print("\nEscolha a forma de pagamento:")
+    print("1 - Cartão de Crédito")
+    print("2 - Pix")
+    print("3 - Boleto")
+    formas = {"1": "cartao", "2": "pix", "3": "boleto"}
+    while True:
+        escolha = input("Digite o número da forma de pagamento: ")
+        if escolha in formas:
+            metodo_pagamento = formas[escolha]
+            break
         else:
-            print("Erro ao confirmar pagamento no sistema.")
+            print("Opção inválida.")
+
+    print("\nProcessando pagamento...")
+    response = requests.post("http://localhost:8000/pagamentos/mock")
+    status_pagamento = "aprovado" if response.status_code == 200 and response.json().get("status") == "aprovado" else "recusado"
+
+    pedido_resp = requests.get(f"http://localhost:8000/pedidos/{id_pedido}")
+    if pedido_resp.status_code == 200:
+        pedido = pedido_resp.json()
+        valor_total = pedido["valor_total"]
     else:
-        # Atualiza o pedido para "pagamento recusado"
-        requests.post(f"http://localhost:8000/pedidos/{id_pedido}/recusar")
+        valor_total = 0
+
+    response = requests.post(
+        f"http://localhost:8000/pagamentos/",
+        json={
+            "id_pedido": id_pedido,
+            "status": status_pagamento,
+            "metodo_pagamento": metodo_pagamento,
+            "valor_total": valor_total
+        }
+    )
+    if status_pagamento == "aprovado" and response.status_code == 201:
+        print("Pagamento aprovado! Sua compra está confirmada.")
+    elif status_pagamento == "recusado":
         print("Pagamento recusado pelo banco. Tente novamente.")
+    else:
+        print("Erro ao registrar pagamento no sistema.")

@@ -13,12 +13,6 @@ def get_db():
     finally:
         conn.close()
 
-@router.post("/{pedido_id}/pagar")
-def pagar_pedido(pedido_id: int, db=Depends(get_db)):
-    cursor = db.cursor()
-    cursor.execute("UPDATE pedido SET status = 'pagamento aprovado', atualizado_em = CURRENT_TIMESTAMP WHERE id_pedido = ?", (pedido_id,))
-    db.commit()
-    return {"msg": "Pagamento confirmado"}
 
 @router.post("/{pedido_id}/recusar")
 def recusar_pagamento_pedido(pedido_id: int, db=Depends(get_db)):
@@ -34,12 +28,6 @@ def listar(db = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Nenhum pedido encontrado")
     return pedido
 
-@router.get("/{usuario_id}", response_model=List[PedidoOut])
-def listar_pedido_usuario(usuario_id:int, db = Depends(get_db)):
-    pedido = listar_pedidos_usuario(db, usuario_id)
-    if not pedido:
-        raise HTTPException(status_code=404, detail="Nenhum pedido encontrado")
-    return pedido
 
 @router.post("/", response_model=PedidoOut)
 def criar(pedido: PedidoBase, db=Depends(get_db)):
@@ -70,3 +58,22 @@ def produtos_do_pedido(pedido_id: int, db=Depends(get_db)):
     if produtos is None:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return produtos
+
+
+@router.get("/{usuario_id}/usuarios", response_model=List[PedidoOut])
+def listar_pedido_usuario(usuario_id:int, db = Depends(get_db)):
+    pedido = listar_pedidos_usuario(db, usuario_id)
+    if not pedido:
+        raise HTTPException(status_code=404, detail="Nenhum pedido encontrado")
+    return pedido
+
+
+@router.get("/{pedido_id}", response_model=PedidoOut)
+def obter_pedido(pedido_id: int, db=Depends(get_db)):
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM pedido WHERE id_pedido = ?", (pedido_id,))
+    row = cursor.fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="Pedido não encontrado")
+    colunas = [desc[0] for desc in cursor.description]
+    return dict(zip(colunas, row))

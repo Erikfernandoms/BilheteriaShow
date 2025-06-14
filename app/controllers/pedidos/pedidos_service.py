@@ -3,7 +3,6 @@ from datetime import datetime
 def criar_pedido(conn, pedido):
     cursor = conn.cursor()
     try:
-        # Soma os ingressos já reservados/aprovados para o evento por esse usuário
         cursor.execute("""
             SELECT COALESCE(SUM(quantidade_ingressos), 0)
             FROM pedido
@@ -84,6 +83,7 @@ def listar_pedidos(conn):
             "atualizado_em": pedido[11]
         } for pedido in pedidos
     ]
+
 
 def listar_produtos_do_pedido(conn, id_pedido: int):
     cursor = conn.cursor()
