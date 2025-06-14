@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime, timedelta
-
+from app.interface.produto import oferecer_produtos
 
 
 def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
@@ -33,10 +33,15 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
     print("\n=== RESERVA DE INGRESSO ===")
     print(f"Pedido reservado com sucesso! ID: {id_pedido}")
     print("Você tem 15 minutos para concluir sua compra.")
+
     print("Agora você pode adicionar produtos ao pedido.")
+    oferecer_produtos(id_pedido, evento['id_evento'])
 
 def listar_pedidos(usuario_logado):
     response = requests.get(f"http://localhost:8000/pedidos/{usuario_logado['id_usuario']}")
+    if response.status_code == 404:
+        print("\nVocê ainda não possui pedidos.")
+        return
     if response.status_code != 200:
         print("\nNão foi possível recuperar os pedidos.")
         return
@@ -45,7 +50,7 @@ def listar_pedidos(usuario_logado):
     if not pedidos:
         print("\nVocê ainda não possui pedidos.")
         return
-   
+
     print("\nSeus pedidos:")
     for pedido in pedidos:
         response = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")

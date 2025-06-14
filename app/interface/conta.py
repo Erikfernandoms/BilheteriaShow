@@ -1,4 +1,5 @@
 import requests
+import bcrypt
 
 def menu_conta(usuario_logado):
     print("\n=== MENU DE CONTA ===")
@@ -32,7 +33,8 @@ def login():
     if response.status_code == 200:
         usuarios = response.json()
         senha = input("\nDigite a sua senha: ")
-        if senha != usuarios["senha"]:
+        senha_hash = usuarios["senha"]
+        if not bcrypt.checkpw(senha.encode(), senha_hash.encode()):
             print("❌ Senha incorreta.")
             return
         else:
@@ -50,14 +52,18 @@ def atualizar_conta(usuario_logado):
     print("\nDeixe o campo vazio se não quiser alterar.")
     nome = input(f"Nome ({usuario_logado['nome']}): ") or usuario_logado['nome']
     email = input(f"Email ({usuario_logado['email']}): ") or usuario_logado['email']
-    senha = input(f"Senha ({usuario_logado['senha']}): ") or usuario_logado['senha']
+    senha = input(f"Senha (deixe em branco para manter): ")
+    if senha:
+        senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
+    else:
+        senha_hash = usuario_logado['senha']
     cpf = input(f"CPF ({usuario_logado['cpf']}): ") or usuario_logado['cpf']
     telefone = input(f"Telefone ({usuario_logado['telefone']}): ") or usuario_logado['telefone']
     cep = input(f"CEP ({usuario_logado['cep']}): ") or usuario_logado['cep']
     usuario_logado_alterado = {
         "nome": nome,
         "email": email,
-        "senha": senha,
+        "senha": senha_hash,
         "cpf": cpf,
         "telefone": telefone,
         "cep": cep
@@ -93,20 +99,18 @@ def cadastrar_usuario():
     telefone = input("Digite o seu telefone: ")
     cep = input("Digite o seu CEP: ")
 
+    senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
 
     usuario_data = {
         "nome": nome,
         "email": email,
-        "senha": senha,
+        "senha": senha_hash,
         "cpf": cpf,
         "telefone": telefone,
         "cep": cep
     }
 
-
     response = requests.post("http://localhost:8000/usuarios/", json=usuario_data)
-    
-
     if response.status_code in (201, 200):
         print("\nConta criada com sucesso!")
         return

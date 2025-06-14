@@ -46,7 +46,7 @@ def init_db():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS produto (
         id_produto INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
+        nome TEXT UNIQUE NOT NULL,
         preco NUMERIC(10,2),
         estoque_disponivel INTEGER,
         ativo BOOLEAN
@@ -85,6 +85,15 @@ def init_db():
         FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
     );
     """)
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS produto_do_evento (
+    id_evento INTEGER NOT NULL,
+    id_produto INTEGER NOT NULL,
+    PRIMARY KEY (id_evento, id_produto),
+    FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
+    FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+    );""")
+
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS produto_do_pedido (
         id_pedido INTEGER NOT NULL,
@@ -106,7 +115,7 @@ def init_db():
         FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
     );""")
 
-    # Dados iniciais
+    """Definindo eventos e setores iniciais"""
     cursor.execute("INSERT OR IGNORE INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Show do Coldplay", "O maior show das americas", "Morumbi", "2025-12-10"))
     cursor.execute("INSERT OR IGNORE INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Rock in Rio", "Venha sentir essa experiência!", "Rio de Janeiro", "2025-09-20"))
     cursor.execute("INSERT OR IGNORE INTO evento (nome, descricao, local, data) VALUES (?, ?, ?, ?)", ("Pericles", "Aaaah se eu largar o freio!", "São Paulo - Allianz Parque", "2025-09-10"))
@@ -128,6 +137,48 @@ def init_db():
     cursor.execute("""INSERT OR IGNORE INTO Setor_Evento (nome, quantidade_lugares, preco_base, id_evento)
     VALUES ("Cadeira Superior", "500", "120.00", (SELECT id_evento FROM Evento WHERE nome = "Pericles"))""")
 
+    """Definindo produtos iniciais"""
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Combo Pipoca + Refrigerante', 35.00, 200, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Camiseta Oficial', 80.00, 100, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Copo Personalizado', 25.00, 300, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Boné do Evento', 40.00, 80, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Combo Cerveja + Batata', 45.00, 150, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Chaveiro Exclusivo', 15.00, 250, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Pulseira Neon', 10.00, 500, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Combo Água + Sanduíche', 30.00, 180, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Água', 10.00, 100, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Ice', 15.00, 100, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Combo Vodka + Energetico', 40.00, 50, 1)""")
+    cursor.execute("""INSERT OR IGNORE INTO produto (nome, preco, estoque_disponivel, ativo) VALUES ('Refrigerante', 8.00, 200, 1)""")
+
+
+    """Associando produtos aos eventos"""
+    cursor.execute("""
+        INSERT OR IGNORE INTO produto_do_evento (id_evento, id_produto)
+        VALUES 
+            ((SELECT id_evento FROM evento WHERE nome = "Show do Coldplay"), (SELECT id_produto FROM produto WHERE nome = "Camiseta Oficial")),
+            ((SELECT id_evento FROM evento WHERE nome = "Show do Coldplay"), (SELECT id_produto FROM produto WHERE nome = "Copo Personalizado")),
+            ((SELECT id_evento FROM evento WHERE nome = "Show do Coldplay"), (SELECT id_produto FROM produto WHERE nome = "Combo Pipoca + Refrigerante")),
+            ((SELECT id_evento FROM evento WHERE nome = "Show do Coldplay"), (SELECT id_produto FROM produto WHERE nome = "Pulseira Neon"))
+    """)
+
+    cursor.execute("""
+        INSERT OR IGNORE INTO produto_do_evento (id_evento, id_produto)
+        VALUES 
+            ((SELECT id_evento FROM evento WHERE nome = "Rock in Rio"), (SELECT id_produto FROM produto WHERE nome = "Boné do Evento")),
+            ((SELECT id_evento FROM evento WHERE nome = "Rock in Rio"), (SELECT id_produto FROM produto WHERE nome = "Combo Cerveja + Batata")),
+            ((SELECT id_evento FROM evento WHERE nome = "Rock in Rio"), (SELECT id_produto FROM produto WHERE nome = "Chaveiro Exclusivo")),
+            ((SELECT id_evento FROM evento WHERE nome = "Rock in Rio"), (SELECT id_produto FROM produto WHERE nome = "Ice"))
+    """)
+
+    cursor.execute("""
+        INSERT OR IGNORE INTO produto_do_evento (id_evento, id_produto)
+        VALUES 
+            ((SELECT id_evento FROM evento WHERE nome = "Pericles"), (SELECT id_produto FROM produto WHERE nome = "Combo Água + Sanduíche")),
+            ((SELECT id_evento FROM evento WHERE nome = "Pericles"), (SELECT id_produto FROM produto WHERE nome = "Refrigerante")),
+            ((SELECT id_evento FROM evento WHERE nome = "Pericles"), (SELECT id_produto FROM produto WHERE nome = "Água")),
+            ((SELECT id_evento FROM evento WHERE nome = "Pericles"), (SELECT id_produto FROM produto WHERE nome = "Pulseira Neon"))
+    """)
     conn.commit()
     conn.close()
     print("Banco de dados criado e populado com sucesso.")
