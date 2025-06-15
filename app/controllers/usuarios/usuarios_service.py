@@ -40,12 +40,11 @@ def obter_usuario(conn, usuario_email: str):
         raise e
 
 def atualizar_usuario(conn, usuario_id: int, dados):
-    
     try:
-        usuario = atualizar_usuario_repository(conn, usuario_id, dados)
-        if not usuario:
+        atualizado = atualizar_usuario_repository(conn, usuario_id, dados)
+        if not atualizado:
             return None
-    
+
         return {
             "id_usuario": usuario_id,
             "nome": dados.nome,
@@ -54,7 +53,7 @@ def atualizar_usuario(conn, usuario_id: int, dados):
             "senha": dados.senha,
             "telefone": dados.telefone,
             "cep": dados.cep
-            }
+        }
     except Exception as e:
         raise e
     
