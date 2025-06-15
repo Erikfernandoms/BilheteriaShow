@@ -47,3 +47,11 @@
 2025-06-15 16:31:57,988 [INFO] Nota fiscal gerada para o pedido 6: notas_fiscais\nota_6.json
 2025-06-15 16:31:57,989 [INFO] Pagamento aprovado para o pedido 6. Nota fiscal gerada.
 2025-06-15 16:31:57,991 [INFO] Pagamento aprovado para pedido 6
+2025-06-15 16:43:18,215 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 16:45:12,068 [INFO] Cadeiras escolhidas: A2,B2
+2025-06-15 16:45:14,108 [INFO] Pedido 7 criado para usuário 2.
+2025-06-15 16:45:14,110 [INFO] Pedido reservado com sucesso! ID: 7
+2025-06-15 16:45:24,488 [INFO] Produto 8 adicionado ao pedido 7 com quantidade 1.
+2025-06-15 16:46:00,836 [INFO] Nota fiscal gerada para o pedido 7: notas_fiscais\nota_7.json
+2025-06-15 16:46:00,837 [INFO] Pagamento aprovado para o pedido 7. Nota fiscal gerada.
+2025-06-15 16:46:00,840 [INFO] Pagamento aprovado para pedido 7
