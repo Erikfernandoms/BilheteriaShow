@@ -7,6 +7,28 @@ def init_db():
     conn = sqlite3.connect("bilhetagem.db")
     cursor = conn.cursor()
 
+    cursor.execute("""CREATE TABLE IF NOT EXISTS cadeira (
+        id_cadeira INTEGER PRIMARY KEY AUTOINCREMENT,
+        identificacao TEXT NOT NULL UNIQUE
+    );""")
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS cadeira_do_setor (
+        id_cadeira INTEGER NOT NULL,
+        id_setor_evento INTEGER NOT NULL,
+        reservada INTEGER DEFAULT 0,
+        PRIMARY KEY (id_cadeira, id_setor_evento),
+        FOREIGN KEY (id_cadeira) REFERENCES cadeira(id_cadeira),
+        FOREIGN KEY (id_setor_evento) REFERENCES setor_evento(id_setor_evento)
+    );""")
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS produto_do_evento (
+    id_evento INTEGER NOT NULL,
+    id_produto INTEGER NOT NULL,
+    PRIMARY KEY (id_evento, id_produto),
+    FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
+    FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+    );""")
+
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS evento (
         id_evento INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,13 +108,6 @@ def init_db():
     );
     """)
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS produto_do_evento (
-    id_evento INTEGER NOT NULL,
-    id_produto INTEGER NOT NULL,
-    PRIMARY KEY (id_evento, id_produto),
-    FOREIGN KEY (id_evento) REFERENCES evento(id_evento),
-    FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
-    );""")
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS produto_do_pedido (
@@ -182,5 +197,26 @@ def init_db():
             ((SELECT id_evento FROM evento WHERE nome = "Pericles"), (SELECT id_produto FROM produto WHERE nome = "Água")),
             ((SELECT id_evento FROM evento WHERE nome = "Pericles"), (SELECT id_produto FROM produto WHERE nome = "Pulseira Neon"))
     """)
+
+    """Definindo as cadeiras iniciais"""
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("A1")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("A2")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("A3")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("A4")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("A5")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("B1")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("B2")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("B3")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("B4")')
+    cursor.execute('INSERT OR IGNORE INTO cadeira (identificacao) VALUES ("B5")')
+
+    """Associando cadeiras aos setores"""
+    cursor.execute("""
+        INSERT OR IGNORE INTO cadeira_do_setor (id_cadeira, id_setor_evento)
+        SELECT c.id_cadeira, se.id_setor_evento
+        FROM cadeira c, setor_evento se
+        WHERE se.nome IN ('Cadeira Superior', 'Cadeira Inferior')
+    """)
+    
     conn.commit()
     conn.close()

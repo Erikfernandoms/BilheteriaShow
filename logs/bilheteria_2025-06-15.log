@@ -1,0 +1,33 @@
+2025-06-15 14:04:13,890 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-15 14:04:19,855 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:04:49,219 [INFO] Pedido criado com sucesso: 1, Evento: 1, Setor: 1, Quantidade: 1
+2025-06-15 14:04:57,625 [INFO] Produto 1 adicionado ao pedido 1 com quantidade 1.
+2025-06-15 14:06:46,941 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:12:19,229 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:15:03,122 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:15:26,494 [INFO] Pedido criado com sucesso: 1, Evento: 1, Setor: 1, Quantidade: 1
+2025-06-15 14:18:32,057 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:18:54,418 [INFO] Pedido criado com sucesso: 1, Evento: 1, Setor: 3, Quantidade: 1
+2025-06-15 14:19:45,980 [INFO] Nota fiscal gerada para o pedido 3: notas_fiscais\nota_3.json
+2025-06-15 14:19:45,981 [INFO] Pagamento aprovado para o pedido 3. Nota fiscal gerada.
+2025-06-15 14:20:25,850 [INFO] Pedidos expirados: 1
+2025-06-15 14:20:25,850 [INFO] Setores atualizados: 1
+2025-06-15 14:22:57,767 [INFO] Pedido criado com sucesso: 1, Evento: 1, Setor: 3, Quantidade: 1
+2025-06-15 14:30:25,882 [INFO] Pedidos expirados: 2
+2025-06-15 14:30:25,882 [INFO] Setores atualizados: 1
+2025-06-15 14:34:53,341 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:36:27,552 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 14:37:21,843 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-15 14:37:24,110 [INFO] Cadeira 1 reservada no setor 6.
+2025-06-15 14:37:24,110 [INFO] Cadeira 2 reservada no setor 6.
+2025-06-15 14:37:24,110 [INFO] Cadeira 3 reservada no setor 6.
+2025-06-15 14:37:24,117 [INFO] Pedido criado com sucesso: 1, Evento: 3, Setor: 6, Quantidade: 3
+2025-06-15 14:37:24,120 [INFO] Pedido reservado com sucesso! ID: 5
+2025-06-15 14:37:33,255 [INFO] Produto 12 adicionado ao pedido 5 com quantidade 2.
+2025-06-15 14:38:14,962 [INFO] Cadeira 10 liberada no setor 3.
+2025-06-15 14:38:14,963 [INFO] Pedido expirado: 4, setor: 3, cadeiras liberadas: B5
+2025-06-15 14:38:14,963 [INFO] Pedidos expirados: 4
+2025-06-15 14:38:14,963 [INFO] Setores atualizados: 3
+2025-06-15 14:38:20,040 [INFO] Nota fiscal gerada para o pedido 5: notas_fiscais\nota_5.json
+2025-06-15 14:38:20,041 [INFO] Pagamento aprovado para o pedido 5. Nota fiscal gerada.
+2025-06-15 14:38:20,044 [INFO] Pagamento aprovado para pedido 5
