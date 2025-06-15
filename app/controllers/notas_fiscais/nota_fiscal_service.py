@@ -1,6 +1,8 @@
 import os
 import json
 from datetime import datetime
+from logger import log_info, log_error
+from metrics import incrementar_metrica
 
 PASTA_NFS = "notas_fiscais"
 os.makedirs(PASTA_NFS, exist_ok=True)
@@ -87,6 +89,8 @@ def gerar_nota_fiscal(conn, pedido_id):
 
     registrar_nota_fiscal(conn, pedido_id, id_pagamento, caminho_arquivo, valor_total_pedido, numero_nota, data_emissao)
     print(f"Nota gerada: {caminho_arquivo}")
+    log_info(f"Nota fiscal gerada para o pedido {pedido_id}: {caminho_arquivo}")
+    incrementar_metrica("notas_fiscais_geradas")
     return caminho_arquivo
 
 def registrar_nota_fiscal(conn, id_pedido, id_pagamento, link_s3, valor_total, numero, emitida_em):

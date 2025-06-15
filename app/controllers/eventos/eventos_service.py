@@ -12,6 +12,13 @@ def listar_setores_eventos(conn, id_evento: int):
     eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
     return eventos
 
+def listar_cadeiras(conn):
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM cadeira")
+    colunas = [desc[0] for desc in cursor.description]
+    cadeiras = [dict(zip(colunas, row)) for row in cursor.fetchall()]
+    return cadeiras
+
 def obter_evento(conn, evento_id: int):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM evento WHERE id_evento = ?", (evento_id,))
@@ -94,3 +101,15 @@ def atualizar_setor_evento(conn, setor_id: int, dados):
         "preco_base": dados.preco_base,
         "id_evento": dados.id_evento
     }
+
+
+def listar_cadeiras_disponiveis(conn, id_setor_evento: int):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT c.id_cadeira, c.identificacao
+        FROM cadeira c
+        JOIN cadeira_do_setor cs ON c.id_cadeira = cs.id_cadeira
+        WHERE cs.id_setor_evento = ? AND cs.reservada = 0
+    """, (id_setor_evento,))
+    colunas = [desc[0] for desc in cursor.description]
+    return [dict(zip(colunas, row)) for row in cursor.fetchall()]

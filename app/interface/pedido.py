@@ -2,11 +2,51 @@ import time
 import requests
 from datetime import datetime, timedelta
 from app.interface.produto import oferecer_produtos
+from logger import log_info, log_error
 
+def exibir_cadeiras_disponiveis(cadeiras):
+    print("\nCadeiras disponíveis:")
+    for cadeira in cadeiras:
+        print(f"{cadeira['id_cadeira']} - {cadeira['identificacao']}")
 
-def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
+def escolher_cadeiras(cadeiras_disponiveis, quantidade):
+    ids_disponiveis = [cadeira['id_cadeira'] for cadeira in cadeiras_disponiveis]
+    cadeiras_escolhidas = []
+    for i in range(quantidade):
+        while True:
+            escolha = input(f"Escolha o ID da cadeira para o ingresso {i+1}: ")
+            if escolha.isdigit() and int(escolha) in ids_disponiveis and int(escolha) not in cadeiras_escolhidas:
+                cadeiras_escolhidas.append(int(escolha))
+                break
+            else:
+                print("Cadeira inválida ou já escolhida. Escolha novamente.")
+    return cadeiras_escolhidas
+
+def obter_identificacoes(cadeiras_disponiveis, cadeiras_escolhidas):
+    return [cadeira['identificacao'] for cadeira in cadeiras_disponiveis if cadeira['id_cadeira'] in cadeiras_escolhidas]
+
+def reserva_ingresso(usuario_logado, evento, setor, quantidade_ingressos, cadeira=None):
     data_solicitacao = datetime.now()
     data_reserva = data_solicitacao + timedelta(minutes=15)
+    cadeira_str = cadeira
+
+    if setor['nome'].lower() in ["cadeira inferior", "cadeira superior"]:
+        response = requests.get(f"http://localhost:8000/eventos/setores/{setor['id_setor_evento']}/cadeiras/disponiveis")
+        if response.status_code != 200:
+            log_error("Não foi possível buscar as cadeiras disponíveis.")
+            print("Não foi possível buscar as cadeiras disponíveis.")
+            return
+        cadeiras_disponiveis = response.json()
+        if len(cadeiras_disponiveis) < int(quantidade_ingressos):
+            log_error("Não há cadeiras suficientes disponíveis neste setor.")
+            print("Não há cadeiras suficientes disponíveis neste setor.")
+            return
+        exibir_cadeiras_disponiveis(cadeiras_disponiveis)
+        cadeiras_escolhidas = escolher_cadeiras(cadeiras_disponiveis, int(quantidade_ingressos))
+        identificacoes = obter_identificacoes(cadeiras_disponiveis, cadeiras_escolhidas)
+        cadeira_str = ",".join(identificacoes)
+        log_info(f"Cadeiras escolhidas: {cadeira_str}")
+
     response = requests.post(
         "http://localhost:8000/pedidos",
         json={
@@ -15,21 +55,25 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
             "id_setor_evento": setor['id_setor_evento'],
             "status": "reservado",
             "setor": setor['nome'],
-            "cadeira": cadeira,
-            "quantidade_ingressos": int(quantidade),
-            "valor_total": float(setor['preco_base']) * int(quantidade),
+            "cadeira": cadeira_str,
+            "quantidade_ingressos": int(quantidade_ingressos),
+            "valor_total": float(setor['preco_base']) * int(quantidade_ingressos),
             "reservado_ate": data_reserva.strftime("%Y-%m-%d %H:%M:%S")
         }
     )
-    if response.status_code not in (200,201):
+    if response.status_code not in (200, 201):
         try:
             erro = response.json()
+            log_error(f"Erro ao reservar ingresso: {erro.get('erro') or erro.get('detail') or 'Tente novamente.'}")
             print(f"\nErro ao reservar ingresso: {erro.get('erro') or erro.get('detail') or 'Tente novamente.'}")
         except Exception:
+            log_error("Erro ao reservar ingresso. Tente novamente.")
             print("\nErro ao reservar ingresso. Tente novamente.")
         return
     pedido = response.json()
     id_pedido = pedido['id_pedido']
+
+    log_info(f"Pedido reservado com sucesso! ID: {id_pedido}")
 
     print("\n=== RESERVA DE INGRESSO ===")
     print(f"Pedido reservado com sucesso! ID: {id_pedido}")
@@ -37,7 +81,7 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade, cadeira=None):
 
     print("Agora você pode adicionar produtos ao pedido.")
     oferecer_produtos(id_pedido, evento['id_evento'])
-    pedidos_pendentes = [pedido]  # O pedido recém-criado
+    pedidos_pendentes = [pedido]
     while True:
         print("\nDeseja finalizar a compra agora?")
         print("1 - Sim")
@@ -58,6 +102,7 @@ def listar_pedidos(usuario_logado):
         print("\nVocê ainda não possui pedidos.")
         return
     if response.status_code != 200:
+        log_error("Não foi possível recuperar os pedidos.")
         print("\nNão foi possível recuperar os pedidos.")
         return
 
@@ -70,6 +115,7 @@ def listar_pedidos(usuario_logado):
     for pedido in pedidos:
         response = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")
         if response.status_code != 200:
+            log_error("Erro ao buscar detalhes do evento.")
             print("\nErro ao buscar detalhes do evento.")
             return
         evento = response.json()
@@ -77,8 +123,9 @@ def listar_pedidos(usuario_logado):
         print(f"Evento: {evento['nome']} | Setor: {pedido['setor']}")
         print(f"Ingressos: {pedido['quantidade_ingressos']} | Total: R${pedido['valor_total']:.2f}")
         print(f"Status: {pedido['status']} | Válido até: {pedido['reservado_ate']}")
-    
-    pedidos_pendentes = [p for p in pedidos if p['status'] == 'reservado']
+        if pedido["setor"].lower() in ["cadeira inferior", "cadeira superior"]:
+            print(f"Cadeiras: {pedido['cadeira']}")
+    pedidos_pendentes = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
     if pedidos_pendentes:
         menu_pagamento(pedidos_pendentes)
 
@@ -89,8 +136,9 @@ def menu_pagamento(pedidos_pendentes):
             response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
             if response.status_code == 200:
                 pedidos = response.json()
-                pedidos_pendentes = [p for p in pedidos if p['status'] == 'reservado']
+                pedidos_pendentes = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
             else:
+                log_error("Não foi possível atualizar a lista de pedidos.")
                 print("\nNão foi possível atualizar a lista de pedidos.")
                 break
 
@@ -107,6 +155,8 @@ def menu_pagamento(pedidos_pendentes):
             print(f"Setor: {pedido['setor']}")
             print(f"Ingressos: {pedido['quantidade_ingressos']}")
             print(f"Total: R${pedido['valor_total']:.2f}")
+            if pedido["setor"].lower() in ["cadeira inferior", "cadeira superior"]:
+                print(f"Cadeiras: {pedido['cadeira']}")
 
             produtos_resp = requests.get(f"http://localhost:8000/pedidos/{pedido['id_pedido']}/produtos")
             if produtos_resp.status_code == 200:
@@ -136,12 +186,13 @@ def menu_pagamento(pedidos_pendentes):
                         print("\nNenhum pedido pendente de pagamento.")
                         break
                 else:
+                    log_error("Não foi possível atualizar a lista de pedidos.")
                     print("\nNão foi possível atualizar a lista de pedidos.")
                     break
             else:
                 print("ID inválido.")
         except Exception as e:
-            print(e)
+            log_error(f"Entrada inválida: {e}")
             print("Entrada inválida.")
 
 def finalizar_pagamento(id_pedido):
@@ -179,8 +230,11 @@ def finalizar_pagamento(id_pedido):
         }
     )
     if status_pagamento == "aprovado" and response.status_code == 201:
+        log_info(f"Pagamento aprovado para pedido {id_pedido}")
         print("Pagamento aprovado! Sua compra está confirmada.")
     elif status_pagamento == "recusado":
+        log_error(f"Pagamento recusado para pedido {id_pedido}")
         print("Pagamento recusado pelo banco. Tente novamente.")
     else:
+        log_error(f"Erro ao registrar pagamento no sistema para pedido {id_pedido}")
         print("Erro ao registrar pagamento no sistema.")

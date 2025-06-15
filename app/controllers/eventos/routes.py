@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 import sqlite3
 from typing import List
-from app.controllers.eventos.eventos_service import listar_eventos, atualizar_setor_evento, criar_evento, obter_evento, atualizar_evento, deletar_evento, listar_setores_eventos, obter_setores_eventos
+from app.controllers.eventos.eventos_service import listar_eventos, listar_cadeiras, atualizar_setor_evento,listar_cadeiras_disponiveis,criar_evento, obter_evento, atualizar_evento, deletar_evento, listar_setores_eventos, obter_setores_eventos
 from app.models.evento import EventoOut, EventoBase, SetorEventoOut
+from app.models.evento import CadeiraOut
 from fastapi_cache.decorator import cache
 
 router = APIRouter()
@@ -13,6 +14,14 @@ def get_db():
     finally:
         conn.close()
 
+@router.get("/setores/cadeiras", response_model=List[SetorEventoOut])
+@cache(expire=300)
+def listar_setores_cadeiras(db = Depends(get_db)):
+    setores_eventos = listar_cadeiras(db)
+    if not setores_eventos:
+        raise HTTPException(status_code=404, detail="Nenhuma cadeira encontrada")
+    return setores_eventos
+
 @router.get("/setores/{evento_id}", response_model=List[SetorEventoOut])
 @cache(expire=300)
 def listar_setores(evento_id: int, db = Depends(get_db)):
@@ -20,6 +29,13 @@ def listar_setores(evento_id: int, db = Depends(get_db)):
     if not setores_eventos:
         raise HTTPException(status_code=404, detail="Nenhum setor de evento encontrado")
     return setores_eventos
+
+@router.get("/setores/{id_setor_evento}/cadeiras/disponiveis", response_model=List[CadeiraOut])
+def listar_cadeiras_setor_disponiveis(id_setor_evento: int, db = Depends(get_db)):
+    cadeiras_disponiveis = listar_cadeiras_disponiveis(db, id_setor_evento)
+    if not cadeiras_disponiveis:
+        raise HTTPException(status_code=404, detail="Nenhuma cadeira disponível encontrada para o setor de evento")
+    return cadeiras_disponiveis
 
 @router.get("/setor/{setor_id}", response_model=SetorEventoOut)
 def lista_setor(setor_id: int, db = Depends(get_db)):

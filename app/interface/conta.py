@@ -1,5 +1,6 @@
 import requests
 import bcrypt
+from logger import log_info, log_error
 
 def menu_conta(usuario_logado):
     print("\n=== MENU DE CONTA ===")
@@ -41,6 +42,7 @@ def login():
             nome = usuarios["nome"]
             print(f"\nBem-vindo, {nome}!")
             usuario_logado = usuarios
+            log_info(f"Usuário {nome} ({email}) logado com sucesso.")
             return usuario_logado
     else:
         print("\nUsuário não encontrado.")
@@ -73,6 +75,7 @@ def atualizar_conta(usuario_logado):
     if response.status_code == 200:
         print("\nConta atualizada com sucesso!")
         usuario_logado = response.json()
+        log_info(f"Conta do usuário {nome} atualizada com sucesso.")
         return usuario_logado
     else:
         print("\nErro ao atualizar conta. Tente novamente.")
@@ -84,6 +87,7 @@ def deletar_conta(usuario_logado):
     response = requests.delete(f"http://localhost:8000/usuarios/{id}")
     if response.status_code == 200:
         print("\nConta deletada com sucesso!")
+        log_info(f"Conta do usuário {usuario_logado['nome']} deletada com sucesso.")
         usuario_logado = None
         return usuario_logado
     else:
@@ -113,6 +117,7 @@ def cadastrar_usuario():
     response = requests.post("http://localhost:8000/usuarios/", json=usuario_data)
     if response.status_code in (201, 200):
         print("\nConta criada com sucesso!")
+        log_info(f"Usuário {nome} ({email}) cadastrado com sucesso.")
         return
     else:
         try:

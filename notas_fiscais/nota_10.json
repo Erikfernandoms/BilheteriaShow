@@ -1,0 +1,30 @@
+{
+    "numero_nota": "NFS-000010",
+    "data_emissao": "2025-06-14T18:31:43.616049",
+    "cliente": {
+        "id": 3,
+        "nome": "erik",
+        "email": "1"
+    },
+    "produtos": [
+        {
+            "nome": "Combo Pipoca + Refrigerante",
+            "quantidade": 1,
+            "preco_unitario": 35
+        },
+        {
+            "nome": "Camiseta Oficial",
+            "quantidade": 1,
+            "preco_unitario": 80
+        }
+    ],
+    "ingresso": {
+        "evento": "Show do Coldplay",
+        "setor": "Cadeira Superior",
+        "quantidade_ingressos": 3,
+        "cadeira": null,
+        "valor_total": 225
+    },
+    "total": 340,
+    "mensagem": "Nota fiscal gerada automaticamente após pagamento."
+}

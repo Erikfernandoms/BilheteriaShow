@@ -27,3 +27,10 @@ class SetorEventoOut(SetorEventoBase):
     quantidade_lugares: int
     preco_base: float
     id_evento: int
+
+class CadeiraBase(BaseModel):
+    id_cadeira: int
+   
+class CadeiraOut(CadeiraBase):
+    id_cadeira: int
+    identificacao: str
