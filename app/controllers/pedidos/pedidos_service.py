@@ -1,96 +1,79 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from logger import log_info, log_error
 from metrics import incrementar_metrica
+from app.repositories.pedidos_repository import (
+    liberar_cadeiras_repository,
+    obter_total_reservado_repository,
+    obter_setor_evento_repository,
+    atualizar_quantidade_lugares_repository,
+    inserir_pedido_repository,
+    listar_pedidos_repository,
+    listar_produtos_do_pedido_repository,
+    atualizar_pedido_repository,
+    deletar_pedido_repository,
+    listar_pedidos_usuario_repository,
+    buscar_pedidos_reservados_expirados_repository,
+    atualizar_status_pedido_expirado_repository,
+    devolver_lugares_setor_repository,
+    listar_produtos_do_pedido_para_expirado_repository,
+    devolver_estoque_produto_repository,
+    reservar_cadeiras_repository
+)
 
 def criar_pedido(conn, pedido):
-    cursor = conn.cursor()
     try:
-        cursor.execute("""
-            SELECT COALESCE(SUM(quantidade_ingressos), 0)
-            FROM pedido
-            WHERE id_usuario = ? AND id_evento = ? AND status IN ('reservado', 'pagamento aprovado')
-        """, (pedido.id_usuario, pedido.id_evento))
-        total_reservado = cursor.fetchone()[0]
+        total_reservado = obter_total_reservado_repository(conn, pedido.id_usuario, pedido.id_evento)
         if total_reservado + pedido.quantidade_ingressos > 3:
-            log_error(f"Usuário {pedido.id_usuario} tentou reservar mais de 3 ingressos para o evento {pedido.id_evento}.")
             return {"erro": "Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos."}
 
         conn.execute('BEGIN IMMEDIATE')
 
-        cursor.execute("""
-            SELECT quantidade_lugares, nome
-            FROM setor_evento 
-            WHERE id_setor_evento = ?
-        """, (pedido.id_setor_evento,))
-        row = cursor.fetchone()
-        if not row or row[0] < pedido.quantidade_ingressos:
+        # Verificação de cadeiras duplicadas
+        if pedido.cadeira:
+            identificacoes = [c.strip() for c in pedido.cadeira.split(",")]
+            cadeiras_ocupadas = []
+            for identificacao in identificacoes:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT 1 FROM pedido
+                    WHERE status IN ('reservado', 'pagamento aprovado')
+                    AND id_setor_evento = ?
+                    AND instr(',' || cadeira || ',', ',' || ? || ',') > 0
+                """, (pedido.id_setor_evento, identificacao))
+                if cursor.fetchone():
+                    cadeiras_ocupadas.append(identificacao)
+            if cadeiras_ocupadas:
+                conn.rollback()
+                return {"erro": f"As cadeiras {', '.join(cadeiras_ocupadas)} já estão reservadas em outro pedido."}
+
+        setor_evento_infos = obter_setor_evento_repository(conn, pedido.id_setor_evento)
+        if not setor_evento_infos or setor_evento_infos[0] < pedido.quantidade_ingressos:
             conn.rollback()
-            log_error(f"Ingressos insuficientes para o setor {pedido.id_setor_evento}. Disponíveis: {row[0] if row else 0}, Solicitados: {pedido.quantidade_ingressos}")
             return {"erro": "Ingressos insuficientes para o setor selecionado."}
 
-        setor_nome = row[1].lower() if row else ""
+        atualizar_quantidade_lugares_repository(conn, pedido.id_setor_evento, pedido.quantidade_ingressos)
 
-        if setor_nome in ["cadeira inferior", "cadeira superior"]:
-            if not pedido.cadeira:
-                conn.rollback()
-                log_error("Tentativa de reserva sem informar cadeiras.")
-                return {"erro": "É necessário informar as cadeiras desejadas para este setor."}
-            identificacoes = [cadeira.strip() for cadeira in pedido.cadeira.split(",") if cadeira.strip()]
-            if len(identificacoes) != pedido.quantidade_ingressos:
-                conn.rollback()
-                log_error("Quantidade de cadeiras não bate com quantidade de ingressos.")
-                return {"erro": "A quantidade de cadeiras deve ser igual à quantidade de ingressos."}
-            ids_cadeiras = buscar_ids_cadeiras(cursor, identificacoes)
-            if len(ids_cadeiras) != len(identificacoes):
-                conn.rollback()
-                log_error("Uma ou mais cadeiras não existem.")
-                return {"erro": "Uma ou mais cadeiras não existem."}
-            sucesso, erro = reservar_cadeiras(conn, pedido.id_setor_evento, ids_cadeiras)
-            if not sucesso:
-                conn.rollback()
-                log_error(f"Falha ao reservar cadeiras: {erro}")
-                return {"erro": erro}
-
-        cursor.execute("""
-            UPDATE setor_evento 
-            SET quantidade_lugares = quantidade_lugares - ?
-            WHERE id_setor_evento = ?
-        """, (pedido.quantidade_ingressos, pedido.id_setor_evento))
-
-        cursor.execute("""
-            INSERT INTO pedido (id_usuario, id_evento, id_setor_evento, status, setor, cadeira, quantidade_ingressos, reservado_ate, valor_total)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            pedido.id_usuario,
-            pedido.id_evento,
-            pedido.id_setor_evento,
-            pedido.status,
-            pedido.setor,
-            pedido.cadeira,
-            pedido.quantidade_ingressos,
-            pedido.reservado_ate,
-            pedido.valor_total
-        ))
+        pedido_id = inserir_pedido_repository(conn, pedido)
 
         conn.commit()
-        log_info(f"Pedido criado com sucesso: {pedido.id_usuario}, Evento: {pedido.id_evento}, Setor: {pedido.id_setor_evento}, Quantidade: {pedido.quantidade_ingressos}")
         incrementar_metrica("pedidos_criados")
+        log_info(f"Pedido {pedido_id} criado para usuário {pedido.id_usuario}.")
         return {
-            "id_pedido": cursor.lastrowid,
+            "id_pedido": pedido_id,
             "id_usuario": pedido.id_usuario,
             "id_evento": pedido.id_evento,
             "id_setor_evento": pedido.id_setor_evento,
+            "status": pedido.status,
             "setor": pedido.setor,
             "cadeira": pedido.cadeira,
             "quantidade_ingressos": pedido.quantidade_ingressos,
-            "valor_total": pedido.valor_total,
             "reservado_ate": pedido.reservado_ate,
-            "status": pedido.status
+            "valor_total": pedido.valor_total
         }
     except Exception as e:
         conn.rollback()
-        log_error(f"Erro ao criar pedido: {str(e)}")
-        return {"erro": f"Erro ao criar pedido: {str(e)}"}
+        log_error(f"Erro ao criar pedido: {e}")
+        raise e
 
 def buscar_ids_cadeiras(cursor, identificacoes):
     cursor.execute(
@@ -102,137 +85,69 @@ def buscar_ids_cadeiras(cursor, identificacoes):
     return [row[0] for row in cursor.fetchall()]
 
 def listar_pedidos(conn):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM pedido")
-    pedidos = cursor.fetchall()
+    pedidos = listar_pedidos_repository(conn)
     return [_pedido_dict(pedido) for pedido in pedidos]
 
 def listar_produtos_do_pedido(conn, id_pedido: int):
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT p.id_produto, p.nome, pp.quantidade, pp.preco, p.estoque_disponivel, p.ativo
-        FROM produto_do_pedido pp
-        JOIN produto p ON p.id_produto = pp.id_produto
-        WHERE pp.id_pedido = ?
-    """, (id_pedido,))
-    colunas = [desc[0] for desc in cursor.description]
-    return [dict(zip(colunas, row)) for row in cursor.fetchall()]
+    return listar_produtos_do_pedido_repository(conn, id_pedido)
 
 def atualizar_pedido(conn, pedido_id, dados):
-    cursor = conn.cursor()
-    cursor.execute("""
-        UPDATE pedido
-        SET id_usuario = ?, id_evento = ?, id_setor_evento = ?, status = ?, setor = ?, cadeira = ?, reservado_ate = ?, valor_total = ?, atualizado_em = CURRENT_TIMESTAMP
-        WHERE id_pedido = ?
-    """, (dados.id_usuario,
-        dados.id_evento,
-        dados.id_setor_evento,
-        dados.status,
-        dados.setor,
-        dados.cadeira,
-        dados.reservado_ate,
-        dados.valor_total,
-        pedido_id
-    ))
-    conn.commit()
-    if cursor.rowcount == 0:
-        log_error(f"Tentativa de atualizar pedido inexistente: {pedido_id}")
+    rowcount = atualizar_pedido_repository(conn, pedido_id, dados)
+    if rowcount == 0:
+        log_error(f"Pedido {pedido_id} não encontrado para atualização.")
         return None
     log_info(f"Pedido {pedido_id} atualizado.")
     return _pedido_dict((pedido_id, dados.id_usuario, dados.id_evento, dados.id_setor_evento, dados.status, dados.setor, dados.cadeira, dados.quantidade_ingressos, dados.reservado_ate, dados.valor_total, None, None))
 
 def deletar_pedido(conn, pedido_id):
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM pedido WHERE id_pedido = ?", (pedido_id,))
-    conn.commit()
-    if cursor.rowcount > 0:
+    rowcount = deletar_pedido_repository(conn, pedido_id)
+    if rowcount > 0:
         log_info(f"Pedido {pedido_id} deletado.")
         return True
     else:
-        log_error(f"Tentativa de deletar pedido inexistente: {pedido_id}")
+        log_error(f"Pedido {pedido_id} não encontrado para deleção.")
         return False
 
 def listar_pedidos_usuario(conn, usuario_id):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM pedido WHERE id_usuario = ? and status != 'cancelado'", (usuario_id,))
-    pedidos = cursor.fetchall()
-    return [_pedido_dict(pedido) for pedido in pedidos] if pedidos else []
+    pedidos = listar_pedidos_usuario_repository(conn, usuario_id)
+    return [_pedido_dict(pedido) for pedido in pedidos]
 
 def cancelar_reservas_expiradas(conn):
-    cursor = conn.cursor()
     agora = datetime.now()
-    cursor.execute("""
-        SELECT id_pedido, reservado_ate, id_setor_evento, quantidade_ingressos FROM pedido
-        WHERE status = 'reservado'
-    """)
-    pedidos = cursor.fetchall()
-    expirados = [
-        (pedido[0], pedido[2], pedido[3])  # id_pedido, id_setor_evento, quantidade_ingressos
-        for pedido in pedidos
-        if datetime.strptime(pedido[1], "%Y-%m-%d %H:%M:%S") < agora
-    ]
-    for id_pedido, id_setor_evento, quantidade_ingressos in expirados:
-        cursor.execute("""
-            UPDATE pedido
-            SET status = 'expirado', atualizado_em = CURRENT_TIMESTAMP
-            WHERE id_pedido = ?
-        """, (id_pedido,))
-        cursor.execute("""
-            UPDATE setor_evento
-            SET quantidade_lugares = quantidade_lugares + ?
-            WHERE id_setor_evento = ?
-        """, (quantidade_ingressos, id_setor_evento))
-        cursor.execute("""
-            SELECT id_produto, quantidade FROM produto_do_pedido
-            WHERE id_pedido = ?
-        """, (id_pedido,))
-        produtos = cursor.fetchall()
-        for id_produto, quantidade in produtos:
-            cursor.execute("""
-                UPDATE produto
-                SET estoque_disponivel = estoque_disponivel + ?
-                WHERE id_produto = ?
-            """, (quantidade, id_produto))
-        cursor.execute("SELECT cadeira FROM pedido WHERE id_pedido = ?", (id_pedido,))
-        cadeiras_pedido = cursor.fetchone()[0]
-        if cadeiras_pedido:
-            identificacoes = [c.strip() for c in cadeiras_pedido.split(",") if c.strip()]
-            ids_cadeiras = buscar_ids_cadeiras(cursor, identificacoes)
-            liberar_cadeiras(conn, id_setor_evento, ids_cadeiras)
-        incrementar_metrica("pedidos_expirados")
-        log_info(f"Pedido expirado: {id_pedido}, setor: {id_setor_evento}, cadeiras liberadas: {cadeiras_pedido}")
-    if expirados:
-        log_info(f"Pedidos expirados: {', '.join(str(p[0]) for p in expirados)}")
-        log_info(f"Setores atualizados: {', '.join(str(p[1]) for p in expirados)}")
-    conn.commit()
+    pedidos = buscar_pedidos_reservados_expirados_repository(conn, agora)
+    for pedido in pedidos:
+        id_pedido, reservado_ate, id_setor_evento, quantidade_ingressos = pedido
+        if reservado_ate and datetime.strptime(reservado_ate, "%Y-%m-%d %H:%M:%S") < agora:
+            atualizar_status_pedido_expirado_repository(conn, id_pedido)
+            devolver_lugares_setor_repository(conn, id_setor_evento, quantidade_ingressos)
+            produtos = listar_produtos_do_pedido_para_expirado_repository(conn, id_pedido)
+            for id_produto, quantidade in produtos:
+                devolver_estoque_produto_repository(conn, id_produto, quantidade)
+            log_info(f"Reserva expirada e cancelada para pedido {id_pedido}.")
 
 def reservar_cadeiras(conn, id_setor_evento, lista_id_cadeiras):
-    cursor = conn.cursor()
-    for id_cadeira in lista_id_cadeiras:
-        cursor.execute("""
-            SELECT reservada FROM cadeira_do_setor
-            WHERE id_cadeira = ? AND id_setor_evento = ?
-        """, (id_cadeira, id_setor_evento))
-        row = cursor.fetchone()
-        if not row or row[0] == 1:
-            log_error(f"Cadeira {id_cadeira} já está reservada ou não existe neste setor.")
-            return False, f"Cadeira {id_cadeira} já está reservada ou não existe neste setor."
-    for id_cadeira in lista_id_cadeiras:
-        cursor.execute("""
-            UPDATE cadeira_do_setor SET reservada = 1
-            WHERE id_cadeira = ? AND id_setor_evento = ?
-        """, (id_cadeira, id_setor_evento))
-        log_info(f"Cadeira {id_cadeira} reservada no setor {id_setor_evento}.")
-    return True, None
+    try:
+        conn.execute('BEGIN IMMEDIATE')
+        resultado = reservar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras)
+        conn.commit()
+        log_info(f"Cadeiras {lista_id_cadeiras} reservadas no setor {id_setor_evento}.")
+        return resultado
+    except Exception as e:
+        conn.rollback()
+        log_error(f"Erro ao reservar cadeiras: {e}")
+        raise e
 
 def liberar_cadeiras(conn, id_setor_evento, lista_id_cadeiras):
-    cursor = conn.cursor()
-    for id_cadeira in lista_id_cadeiras:
-        cursor.execute("""
-            UPDATE cadeira_do_setor SET reservada = 0
-            WHERE id_cadeira = ? AND id_setor_evento = ?
-        """, (id_cadeira, id_setor_evento))
-        log_info(f"Cadeira {id_cadeira} liberada no setor {id_setor_evento}.")
+    try:
+        conn.execute('BEGIN IMMEDIATE')
+        resultado = liberar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras)
+        conn.commit()
+        log_info(f"Cadeiras {lista_id_cadeiras} liberadas no setor {id_setor_evento}.")
+        return resultado
+    except Exception as e:
+        conn.rollback()
+        log_error(f"Erro ao liberar cadeiras: {e}")
+        raise e
 
 def _pedido_dict(pedido_tuple):
     return {
@@ -246,6 +161,5 @@ def _pedido_dict(pedido_tuple):
         "quantidade_ingressos": pedido_tuple[7],
         "reservado_ate": pedido_tuple[8],
         "valor_total": pedido_tuple[9],
-        "criado_em": pedido_tuple[10] if len(pedido_tuple) > 10 else None,
-        "atualizado_em": pedido_tuple[11] if len(pedido_tuple) > 11 else None
+        "criado_em": pedido_tuple[10],
     }

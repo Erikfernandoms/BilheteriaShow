@@ -1,3 +1,5 @@
 fastapi
 uvicorn
 fastapi-cache2
+requests
+bcrypt

@@ -1,13 +1,13 @@
-from app.interface.conta import menu_conta
+from app.interface.usuarios import menu_conta
 from app.interface.eventos import menu_eventos
-from app.interface.conta import cadastrar_usuario
+from app.interface.usuarios import cadastrar_usuario
 
-from app.interface.conta import login
+from app.interface.usuarios import login
 from database.init_db import init_db
 import sys
 
 from threading import Thread
-from app.rotina.limpeza import rotina_limpeza_pedidos  # se salvar num módulo separado
+from app.jobs.limpeza import rotina_limpeza_pedidos  # se salvar num módulo separado
 
 def menu_principal(usuario_logado):
     init_db()
