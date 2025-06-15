@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 import sqlite3
-from app.controllers.usuarios.usuario_service import atualizar_usuario, deletar_usuario, obter_usuario, criar_usuario
+from app.controllers.usuarios.usuarios_service import atualizar_usuario, deletar_usuario, obter_usuario, criar_usuario
 from app.models.usuario import UsuarioBase, UsuarioOut
 
 router = APIRouter()
