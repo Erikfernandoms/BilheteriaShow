@@ -55,3 +55,60 @@
 2025-06-15 16:46:00,836 [INFO] Nota fiscal gerada para o pedido 7: notas_fiscais\nota_7.json
 2025-06-15 16:46:00,837 [INFO] Pagamento aprovado para o pedido 7. Nota fiscal gerada.
 2025-06-15 16:46:00,840 [INFO] Pagamento aprovado para pedido 7
+2025-06-15 16:55:51,139 [INFO] Usuário erik1 (1) cadastrado com sucesso.
+2025-06-15 16:55:59,433 [INFO] Usuário erik1 (1) logado com sucesso.
+2025-06-15 16:56:13,944 [INFO] Conta do usuário Erik atualizada com sucesso.
+2025-06-15 16:56:20,886 [INFO] Conta do usuário Erik deletada com sucesso.
+2025-06-15 16:56:37,404 [INFO] Usuário Erik (1) cadastrado com sucesso.
+2025-06-15 16:56:49,956 [INFO] Usuário Erik (1) logado com sucesso.
+2025-06-15 16:57:16,543 [INFO] Pedido 8 criado para usuário 4.
+2025-06-15 16:57:16,544 [INFO] Pedido reservado com sucesso! ID: 8
+2025-06-15 16:57:23,516 [INFO] Produto 10 adicionado ao pedido 8 com quantidade 1.
+2025-06-15 16:57:43,275 [INFO] Nota fiscal gerada para o pedido 8: notas_fiscais\nota_8.json
+2025-06-15 16:57:43,276 [INFO] Pagamento aprovado para o pedido 8. Nota fiscal gerada.
+2025-06-15 16:57:43,279 [INFO] Pagamento aprovado para pedido 8
+2025-06-15 16:58:21,030 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-15 16:58:47,000 [INFO] Cadeiras escolhidas: A5,B1
+2025-06-15 16:58:49,327 [INFO] Pedido 9 criado para usuário 4.
+2025-06-15 16:58:49,329 [INFO] Pedido reservado com sucesso! ID: 9
+2025-06-15 16:58:58,499 [INFO] Produto 8 adicionado ao pedido 9 com quantidade 10.
+2025-06-15 16:59:39,852 [INFO] Nota fiscal gerada para o pedido 9: notas_fiscais\nota_9.json
+2025-06-15 16:59:39,853 [INFO] Pagamento aprovado para o pedido 9. Nota fiscal gerada.
+2025-06-15 16:59:39,856 [INFO] Pagamento aprovado para pedido 9
+2025-06-15 17:03:24,862 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 17:03:49,674 [ERROR] Não foi possível buscar as cadeiras disponíveis.
+2025-06-15 17:04:57,160 [ERROR] Não foi possível buscar as cadeiras disponíveis.
+2025-06-15 17:06:07,563 [INFO] Cadeiras escolhidas: B4,B5
+2025-06-15 17:06:09,586 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-15 17:07:14,526 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-15 17:07:23,342 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 17:07:44,244 [INFO] Cadeiras escolhidas: B4,B5
+2025-06-15 17:07:46,533 [INFO] Pedido 1 criado para usuário 1.
+2025-06-15 17:07:46,535 [INFO] Pedido reservado com sucesso! ID: 1
+2025-06-15 17:08:27,053 [INFO] Cadeiras escolhidas: A5
+2025-06-15 17:08:29,242 [INFO] Pedido 2 criado para usuário 1.
+2025-06-15 17:08:29,244 [INFO] Pedido reservado com sucesso! ID: 2
+2025-06-15 17:08:35,363 [INFO] Produto 8 adicionado ao pedido 2 com quantidade 2.
+2025-06-15 17:09:08,203 [INFO] Cadeiras escolhidas: B5
+2025-06-15 17:09:10,240 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-15 17:09:59,730 [INFO] Cadeiras escolhidas: A5
+2025-06-15 17:10:01,930 [INFO] Pedido 3 criado para usuário 1.
+2025-06-15 17:10:01,931 [INFO] Pedido reservado com sucesso! ID: 3
+2025-06-15 17:12:55,534 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 17:13:17,863 [INFO] Cadeiras escolhidas: A5
+2025-06-15 17:13:19,898 [INFO] Pedido 4 criado para usuário 1.
+2025-06-15 17:13:19,899 [INFO] Pedido reservado com sucesso! ID: 4
+2025-06-15 17:16:14,203 [INFO] Cadeiras escolhidas: A5
+2025-06-15 17:16:16,515 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-15 17:16:30,879 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-15 17:17:20,173 [INFO] Cadeiras escolhidas: B5
+2025-06-15 17:17:22,208 [INFO] Pedido 5 criado para usuário 1.
+2025-06-15 17:17:22,210 [INFO] Pedido reservado com sucesso! ID: 5
+2025-06-15 17:17:47,410 [INFO] Cadeiras escolhidas: B3
+2025-06-15 17:17:49,844 [INFO] Pedido 6 criado para usuário 1.
+2025-06-15 17:17:49,846 [INFO] Pedido reservado com sucesso! ID: 6
+2025-06-15 17:19:05,742 [INFO] Pedido 7 criado para usuário 1.
+2025-06-15 17:19:05,743 [INFO] Pedido reservado com sucesso! ID: 7
+2025-06-15 17:19:33,330 [INFO] Cadeiras escolhidas: A1,A2
+2025-06-15 17:19:35,630 [INFO] Pedido 8 criado para usuário 1.
+2025-06-15 17:19:35,632 [INFO] Pedido reservado com sucesso! ID: 8

@@ -134,33 +134,23 @@ def obter_cadeiras_pedido_repository(conn, id_pedido):
 
 
 def reservar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras):
-    try:
-        cursor = conn.cursor()
-        for id_cadeira in lista_id_cadeiras:
-            cursor.execute("""
-                UPDATE cadeira
-                SET reservada = 1
-                WHERE id_cadeira = ? AND id_setor_evento = ? AND reservada = 0
-            """, (id_cadeira, id_setor_evento))
-            if cursor.rowcount == 0:
-                raise Exception(f"Cadeira {id_cadeira} já está reservada ou não existe no setor {id_setor_evento}.")
-        conn.commit()
-        return True
-    except Exception as e:
-        conn.rollback()
-        raise e
+    cursor = conn.cursor()
+    for id_cadeira in lista_id_cadeiras:
+        cursor.execute("""
+            UPDATE cadeira
+            SET reservada = 1
+            WHERE id_cadeira = ? AND id_setor_evento = ? AND reservada = 0
+        """, (id_cadeira, id_setor_evento))
+        if cursor.rowcount == 0:
+            raise Exception(f"Cadeira {id_cadeira} já está reservada ou não existe no setor {id_setor_evento}.")
+    return True
 
 def liberar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras):
-    try:
-        cursor = conn.cursor()
-        for id_cadeira in lista_id_cadeiras:
-            cursor.execute("""
-                UPDATE cadeira
-                SET reservada = 0
-                WHERE id_cadeira = ? AND id_setor_evento = ? AND reservada = 1
-            """, (id_cadeira, id_setor_evento))
-        conn.commit()
-        return True
-    except Exception as e:
-        conn.rollback()
-        raise e
+    cursor = conn.cursor()
+    for id_cadeira in lista_id_cadeiras:
+        cursor.execute("""
+            UPDATE cadeira
+            SET reservada = 0
+            WHERE id_cadeira = ? AND id_setor_evento = ? AND reservada = 1
+        """, (id_cadeira, id_setor_evento))
+    return True

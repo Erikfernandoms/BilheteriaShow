@@ -1,115 +1,94 @@
+from app.repositories.eventos_repository import (
+    listar_eventos_repository,
+    listar_setores_eventos_repository,
+    listar_cadeiras_repository,
+    obter_evento_repository,
+    obter_setores_eventos_repository,
+    criar_evento_repository,
+    atualizar_evento_repository,
+    deletar_evento_repository,
+    atualizar_setor_evento_repository,
+    listar_cadeiras_disponiveis_repository
+)
+
 def listar_eventos(conn):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM evento")
-    colunas = [desc[0] for desc in cursor.description]
-    eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-    return eventos
+    return listar_eventos_repository(conn)
 
 def listar_setores_eventos(conn, id_evento: int):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM setor_evento where id_evento = ?", (id_evento,))
-    colunas = [desc[0] for desc in cursor.description]
-    eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-    return eventos
+    return listar_setores_eventos_repository(conn, id_evento)
 
 def listar_cadeiras(conn):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM cadeira")
-    colunas = [desc[0] for desc in cursor.description]
-    cadeiras = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-    return cadeiras
+    return listar_cadeiras_repository(conn)
 
 def obter_evento(conn, evento_id: int):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM evento WHERE id_evento = ?", (evento_id,))
-    evento = cursor.fetchone()
-    
-    if evento:
-        colunas = [desc[0] for desc in cursor.description]
-        return dict(zip(colunas, evento))
-    else:
-        return None
+    return obter_evento_repository(conn, evento_id)
 
 def obter_setores_eventos(conn, setor_id: int):
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM setor_evento WHERE id_setor_evento = ?", (setor_id,))
-    colunas = [desc[0] for desc in cursor.description]
-    setores_eventos = [dict(zip(colunas, row)) for row in cursor.fetchall()]
-    return setores_eventos
+    return obter_setores_eventos_repository(conn, setor_id)
 
 def criar_evento(conn, evento):
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO evento (nome, descricao, local, data)
-        VALUES (?, ?, ?, ?)
-    """, (evento.nome, evento.descricao, evento.local, evento.data))
-    conn.commit()
-    return {
-        "id_evento": cursor.lastrowid,
-        "nome": evento.nome,
-        "descricao": evento.descricao,
-        "local": evento.local,
-        "data": evento.data
-    }
-
+    try:
+        evento_id = criar_evento_repository(conn, evento)
+        conn.commit()
+        return {
+            "id_evento": evento_id,
+            "nome": evento.nome,
+            "descricao": evento.descricao,
+            "local": evento.local,
+            "data": evento.data
+        }
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 def atualizar_evento(conn, evento_id: int, dados):
-    cursor = conn.cursor()
-    cursor.execute("""
-        UPDATE evento
-        SET nome = ?, descricao = ?, local = ?, data = ?
-        WHERE id_evento = ?
-    """, (dados.nome, dados.descricao, dados.local, dados.data, evento_id))
-    conn.commit()
-
-    if cursor.rowcount == 0:
-        return None
-
-    return {
-        "id_evento": evento_id,
-        "nome": dados.nome,
-        "descricao": dados.descricao,
-        "local": dados.local,
-        "data": dados.data
-    }
+    try:
+        atualizado = atualizar_evento_repository(conn, evento_id, dados)
+        if not atualizado:
+            conn.rollback()
+            return None
+        conn.commit()
+        return {
+            "id_evento": evento_id,
+            "nome": dados.nome,
+            "descricao": dados.descricao,
+            "local": dados.local,
+            "data": dados.data
+        }
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 def deletar_evento(conn, evento_id: int):
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM evento WHERE id_evento = ?", (evento_id,))
-    conn.commit()
-
-    if cursor.rowcount == 0:
-        return False
-    return True
+    try:
+        resultado = deletar_evento_repository(conn, evento_id)
+        if resultado:
+            conn.commit()
+            return True
+        else:
+            conn.rollback()
+            return False
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 def atualizar_setor_evento(conn, setor_id: int, dados):
-    cursor = conn.cursor()
-    cursor.execute("""
-        UPDATE setor_evento
-        SET nome = ?, quantidade_lugares = ?, preco_base = ?
-        WHERE id_setor_evento = ?
-    """, (dados.nome, dados.quantidade_lugares, dados.preco_base, setor_id))
-    conn.commit()
-
-    if cursor.rowcount == 0:
-        return None
-
-    return {
-        "id_setor_evento": setor_id,
-        "nome": dados.nome,
-        "quantidade_lugares": dados.quantidade_lugares,
-        "preco_base": dados.preco_base,
-        "id_evento": dados.id_evento
-    }
-
+    try:
+        atualizado = atualizar_setor_evento_repository(conn, setor_id, dados)
+        if not atualizado:
+            conn.rollback()
+            return None
+        conn.commit()
+        return {
+            "id_setor_evento": setor_id,
+            "nome": dados.nome,
+            "quantidade_lugares": dados.quantidade_lugares,
+            "preco_base": dados.preco_base,
+            "id_evento": dados.id_evento
+        }
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 def listar_cadeiras_disponiveis(conn, id_setor_evento: int):
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT c.id_cadeira, c.identificacao
-        FROM cadeira c
-        JOIN cadeira_do_setor cs ON c.id_cadeira = cs.id_cadeira
-        WHERE cs.id_setor_evento = ? AND cs.reservada = 0
-    """, (id_setor_evento,))
-    colunas = [desc[0] for desc in cursor.description]
-    return [dict(zip(colunas, row)) for row in cursor.fetchall()]
+    return listar_cadeiras_disponiveis_repository(conn, id_setor_evento)  # CERTO: chama a função e retorna o resultado

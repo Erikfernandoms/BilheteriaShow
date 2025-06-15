@@ -1,8 +1,12 @@
 import sqlite3
 from fastapi import HTTPException
-from app.repositories.usuarios_repository import atualizar_usuario_repository, criar_usuario_repository, deletar_usuario_repository, listar_usuarios_repository, obter_usuario_repository
-
-
+from app.repositories.usuarios_repository import (
+    atualizar_usuario_repository,
+    criar_usuario_repository,
+    deletar_usuario_repository,
+    listar_usuarios_repository,
+    obter_usuario_repository
+)
 
 def listar_usuarios(conn):
     try:
@@ -12,13 +16,19 @@ def listar_usuarios(conn):
 
 def criar_usuario(conn, usuario):
     try:
-        return criar_usuario_repository(conn, usuario)
+        resultado = criar_usuario_repository(conn, usuario)
+        conn.commit()
+        return resultado
     except sqlite3.IntegrityError as e:
+        conn.rollback()
         if "cpf" in str(e).lower():
             raise HTTPException(status_code=400, detail="Já existe um usuário cadastrado com esse CPF.")
         if "email" in str(e).lower():
             raise HTTPException(status_code=400, detail="Já existe um usuário cadastrado com esse e-mail.")
         raise HTTPException(status_code=400, detail="Erro ao criar usuário: dados duplicados.")
+    except Exception as e:
+        conn.rollback()
+        raise e
 
 def obter_usuario(conn, usuario_email: str):
     try:
@@ -43,8 +53,9 @@ def atualizar_usuario(conn, usuario_id: int, dados):
     try:
         atualizado = atualizar_usuario_repository(conn, usuario_id, dados)
         if not atualizado:
+            conn.rollback()
             return None
-
+        conn.commit()
         return {
             "id_usuario": usuario_id,
             "nome": dados.nome,
@@ -55,15 +66,18 @@ def atualizar_usuario(conn, usuario_id: int, dados):
             "cep": dados.cep
         }
     except Exception as e:
+        conn.rollback()
         raise e
-    
+
 def deletar_usuario(conn, usuario_id: int):
     try:
-        if deletar_usuario_repository(conn, usuario_id):
+        resultado = deletar_usuario_repository(conn, usuario_id)
+        if resultado:
+            conn.commit()
             return True
         else:
+            conn.rollback()
             return False
-
     except Exception as e:
-        raise e
-
+        conn.rollback()
+        raise

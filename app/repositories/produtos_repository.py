@@ -1,12 +1,8 @@
-
-
-
 def listar_produtos_repository(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM produto")
     colunas = [desc[0] for desc in cursor.description]
     return [dict(zip(colunas, row)) for row in cursor.fetchall()]
-
 
 def listar_produtos_do_evento_repository(conn, id_evento):
     cursor = conn.cursor()
@@ -18,14 +14,12 @@ def listar_produtos_do_evento_repository(conn, id_evento):
     colunas = [desc[0] for desc in cursor.description]
     return [dict(zip(colunas, row)) for row in cursor.fetchall()]
 
-
 def associar_produto_ao_evento_repository(conn, id_evento: int, id_produto: int):
     cursor = conn.cursor()
     cursor.execute("""
         INSERT OR IGNORE INTO produto_do_evento (id_evento, id_produto)
         VALUES (?, ?)
     """, (id_evento, id_produto))
-    conn.commit()
     return True
 
 def obter_produto_repository(conn, produto_id):
@@ -37,14 +31,12 @@ def obter_produto_repository(conn, produto_id):
         return dict(zip(colunas, row))
     return None
 
-
 def criar_produto_repository(conn, produto):
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO produto (nome, preco, estoque_disponivel, ativo)
         VALUES (?, ?, ?, ?)
     """, (produto.nome, produto.preco, produto.estoque_disponivel, produto.ativo))
-    conn.commit()
     return cursor.lastrowid
 
 def atualizar_produto_repository(conn, produto_id: int, dados):
@@ -53,13 +45,11 @@ def atualizar_produto_repository(conn, produto_id: int, dados):
         UPDATE produto SET nome=?, preco=?, estoque_disponivel=?, ativo=?
         WHERE id_produto=?
     """, (dados.nome, dados.preco, dados.estoque_disponivel, dados.ativo, produto_id))
-    conn.commit()
     return True
 
 def deletar_produto_repository(conn, produto_id: int):
     cursor = conn.cursor()
     cursor.execute("DELETE FROM produto WHERE id_produto=?", (produto_id,))
-    conn.commit()
     return True
 
 def adicionar_produto_pedido_repository(conn, pedido_id: int, id_produto: int, quantidade: int):
@@ -80,13 +70,10 @@ def adicionar_produto_pedido_repository(conn, pedido_id: int, id_produto: int, q
         WHERE id_produto = ?
     """, (quantidade, id_produto))
 
-    # Atualiza o valor_total do pedido
     valor_adicional = preco_produto * quantidade
     cursor.execute("""
     UPDATE pedido SET valor_total = valor_total + ?, atualizado_em = CURRENT_TIMESTAMP
     WHERE id_pedido = ?
     """, (valor_adicional, pedido_id))
-
-    conn.commit()
 
     return cursor.lastrowid

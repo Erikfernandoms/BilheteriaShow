@@ -17,12 +17,10 @@ from app.repositories.pedidos_repository import (
     devolver_lugares_setor_repository,
     listar_produtos_do_pedido_para_expirado_repository,
     devolver_estoque_produto_repository,
-    obter_cadeiras_pedido_repository,
     reservar_cadeiras_repository
 )
 
 def criar_pedido(conn, pedido):
-    cursor = conn.cursor()
     try:
         total_reservado = obter_total_reservado_repository(conn, pedido.id_usuario, pedido.id_evento)
         if total_reservado + pedido.quantidade_ingressos > 3:
@@ -30,8 +28,26 @@ def criar_pedido(conn, pedido):
 
         conn.execute('BEGIN IMMEDIATE')
 
-        row = obter_setor_evento_repository(conn, pedido.id_setor_evento)
-        if not row or row[0] < pedido.quantidade_ingressos:
+        # Verificação de cadeiras duplicadas
+        if pedido.cadeira:
+            identificacoes = [c.strip() for c in pedido.cadeira.split(",")]
+            cadeiras_ocupadas = []
+            for identificacao in identificacoes:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT 1 FROM pedido
+                    WHERE status IN ('reservado', 'pagamento aprovado')
+                    AND id_setor_evento = ?
+                    AND instr(',' || cadeira || ',', ',' || ? || ',') > 0
+                """, (pedido.id_setor_evento, identificacao))
+                if cursor.fetchone():
+                    cadeiras_ocupadas.append(identificacao)
+            if cadeiras_ocupadas:
+                conn.rollback()
+                return {"erro": f"As cadeiras {', '.join(cadeiras_ocupadas)} já estão reservadas em outro pedido."}
+
+        setor_evento_infos = obter_setor_evento_repository(conn, pedido.id_setor_evento)
+        if not setor_evento_infos or setor_evento_infos[0] < pedido.quantidade_ingressos:
             conn.rollback()
             return {"erro": "Ingressos insuficientes para o setor selecionado."}
 
@@ -111,19 +127,25 @@ def cancelar_reservas_expiradas(conn):
 
 def reservar_cadeiras(conn, id_setor_evento, lista_id_cadeiras):
     try:
+        conn.execute('BEGIN IMMEDIATE')
         resultado = reservar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras)
+        conn.commit()
         log_info(f"Cadeiras {lista_id_cadeiras} reservadas no setor {id_setor_evento}.")
         return resultado
     except Exception as e:
+        conn.rollback()
         log_error(f"Erro ao reservar cadeiras: {e}")
         raise e
 
 def liberar_cadeiras(conn, id_setor_evento, lista_id_cadeiras):
     try:
+        conn.execute('BEGIN IMMEDIATE')
         resultado = liberar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras)
+        conn.commit()
         log_info(f"Cadeiras {lista_id_cadeiras} liberadas no setor {id_setor_evento}.")
         return resultado
     except Exception as e:
+        conn.rollback()
         log_error(f"Erro ao liberar cadeiras: {e}")
         raise e
 
