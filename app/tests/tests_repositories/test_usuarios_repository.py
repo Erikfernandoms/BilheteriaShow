@@ -22,7 +22,7 @@ def test_criar_e_listar_usuarios_repository(conn, usuario_valido):
     delete_memory(conn)
     criar_usuario_repository(conn, usuario_valido)
     usuarios = listar_usuarios_repository(conn)
-    assert any(u["email"] == usuario_valido.email for u in usuarios)
+    assert any(usuario["email"] == usuario_valido.email for usuario in usuarios)
 
 def test_obter_usuario_repository(conn, usuario_valido):
     criar_usuario_repository(conn, usuario_valido)

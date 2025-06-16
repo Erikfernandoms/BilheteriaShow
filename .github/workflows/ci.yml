@@ -1,4 +1,4 @@
-name: CI
+name: CI - Bilhetagem
 
 on:
   push:
@@ -24,5 +24,11 @@ jobs:
         pip install -r requirements.txt
         pip install pytest
 
-    - name: Run tests
-      run: PYTHONPATH=. pytest
+    - name: Run Unit Tests
+      run: pytest app/tests
+
+    - name: Init Local Server
+      run: uvicorn run:app --reload
+      
+    - name: Running TaaC - Interface
+        run: pytest tests/integration

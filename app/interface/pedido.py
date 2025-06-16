@@ -146,7 +146,7 @@ def menu_pagamento(pedidos_reservados):
             print("\nNenhum pedido reservado de pagamento.")
             break
 
-        print("\nPedidos reservados de pagamento:")
+        print("\nPedidos reservados aguardando pagamento:")
         for pedido in pedidos_reservados:
             evento_resp = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")
             nome_evento = evento_resp.json()['nome'] if evento_resp.status_code == 200 else f"Evento {pedido['id_evento']}"

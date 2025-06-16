@@ -1,0 +1,25 @@
+{
+    "numero_nota": "NFS-000004",
+    "data_emissao": "2025-06-16T13:21:21.865053",
+    "cliente": {
+        "id": 9,
+        "nome": "Erik",
+        "email": "mendes"
+    },
+    "produtos": [
+        {
+            "nome": "Combo Pipoca + Refrigerante",
+            "quantidade": 20,
+            "preco_unitario": 35
+        }
+    ],
+    "ingresso": {
+        "evento": "Show do Coldplay",
+        "setor": "Camarote",
+        "quantidade_ingressos": 1,
+        "cadeira": null,
+        "valor_total": 255
+    },
+    "total": 955,
+    "mensagem": "Nota fiscal gerada automaticamente após pagamento."
+}
