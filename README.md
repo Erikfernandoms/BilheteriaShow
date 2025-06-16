@@ -88,6 +88,8 @@ A solução foi estruturada com base no modelo de arquitetura do Itaú Unibanco,
 
 ---
 
+## Decisões arquiteturais
+
 ### 🧱 Backend (ECS Fargate)
 - `eventos-api-service`: gerenciamento de eventos e setores
 - `produtos-api-service`: gerenciamento de produtos adicionais
