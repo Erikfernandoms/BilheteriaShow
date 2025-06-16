@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from types import SimpleNamespace
+from typing import Optional
 import pytest
 from unittest.mock import MagicMock
 import sqlite3
@@ -19,6 +20,12 @@ class DummyPagamento:
         self.metodo_pagamento = metodo_pagamento
         self.valor_total = valor_total
 
+class DummyProduto:
+    def __init__(self, nome, preco, estoque_disponivel, ativo):
+        self.nome = nome
+        self.preco = preco
+        self.estoque_disponivel = estoque_disponivel
+        self.ativo = ativo
 
 class DadosSetor:
     def __init__(self, nome, quantidade_lugares, preco_base, id_evento):
@@ -27,6 +34,18 @@ class DadosSetor:
         self.preco_base = preco_base
         self.id_evento = id_evento
 
+class DummyPedido:
+    def __init__(self, id_usuario, id_evento, id_setor_evento, status, setor, cadeira, quantidade_ingressos, valor_total, reservado_ate):
+        self.id_usuario = id_usuario
+        self.id_evento = id_evento
+        self.id_setor_evento = id_setor_evento
+        self.status = status
+        self.setor = setor
+        self.cadeira = cadeira
+        self.quantidade_ingressos = quantidade_ingressos
+        self.valor_total = valor_total
+        self.reservado_ate = reservado_ate
+    
 
 
 @pytest.fixture
@@ -67,11 +86,46 @@ def usuario_mock():
 
 
 @pytest.fixture
+def produto_base():
+    return DummyProduto("Camiseta", 80.0, 10, True)
+
+
+@pytest.fixture
 def produtos_mock():
     return [
         {"nome": "Camiseta", "quantidade": 1, "preco_unitario": 80.00},
         {"nome": "Copo", "quantidade": 2, "preco_unitario": 30.00}
     ]
+
+@pytest.fixture
+def pedido():
+    fake = MagicMock()
+    fake.id_usuario = 1
+    fake.id_evento = 2
+    fake.id_setor_evento = 3
+    fake.quantidade_ingressos = 1
+    fake.status = "reservado"
+    fake.setor = "VIP"
+    fake.cadeira = "A1"
+    fake.reservado_ate = "2025-01-01 12:00:00"
+    fake.valor_total = 100.0
+    return fake
+
+
+@pytest.fixture
+def pedido_base():
+    return DummyPedido(
+        id_usuario=1,
+        id_evento=1,
+        id_setor_evento=1,
+        status="reservado",
+        setor="VIP",
+        cadeira="C1,C2",
+        quantidade_ingressos=2,
+        reservado_ate=(datetime.now() + timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S"),
+        valor_total=300.0
+    )
+
 
 
 """
@@ -275,33 +329,4 @@ def criar_usuario_e_pedido(conn):
     """, (id_usuario,))
     id_pedido = cursor.lastrowid
     return id_usuario, id_pedido
-
-@pytest.fixture
-def pedido():
-    fake = MagicMock()
-    fake.id_usuario = 1
-    fake.id_evento = 2
-    fake.id_setor_evento = 3
-    fake.quantidade_ingressos = 1
-    fake.status = "reservado"
-    fake.setor = "VIP"
-    fake.cadeira = "A1"
-    fake.reservado_ate = "2025-01-01 12:00:00"
-    fake.valor_total = 100.0
-    return fake
-
-
-@pytest.fixture
-def pedido_base():
-    return SimpleNamespace(
-        id_usuario=1,
-        id_evento=1,
-        id_setor_evento=1,
-        status="reservado",
-        setor="VIP",
-        cadeira="C1,C2",
-        quantidade_ingressos=2,
-        reservado_ate=(datetime.now() + timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S"),
-        valor_total=300.0
-    )
 
