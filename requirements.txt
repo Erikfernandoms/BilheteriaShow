@@ -4,3 +4,4 @@ fastapi-cache2
 requests
 bcrypt
 pytest
+httpx
