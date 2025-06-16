@@ -27,8 +27,14 @@ jobs:
     - name: Run Unit Tests
       run: pytest app/tests
 
-    - name: Init Local Server
-      run: uvicorn run:app --reload
-      
-    - name: Running TaaC - Interface
-      run: pytest tests/integration
+    - name: Start API Server (background)
+      run: |
+        uvicorn run:app --port 8000 &
+        sleep 5
+
+    - name: Run Integration/TaaC Tests
+      run: pytest tests/integrations
+
+    - name: Stop API Server
+      run: |
+        pkill -f "uvicorn"

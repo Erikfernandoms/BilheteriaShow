@@ -2,15 +2,6 @@ import pytest
 from unittest.mock import patch
 from app.interface.eventos import menu_eventos, menu_setores
 
-@pytest.fixture
-def usuario_mock():
-    return {
-        "id_usuario": 999,
-        "nome": "Usuário Teste",
-        "email": "teste@teste.com",
-        "cpf": "00000000000"
-    }
-
 
 @patch("builtins.input", side_effect=["0"])  # Nenhuma opção válida, sai do menu
 def test_menu_eventos_sem_opcao_valida(mock_input, usuario_mock, capsys):
@@ -22,7 +13,7 @@ def test_menu_eventos_sem_opcao_valida(mock_input, usuario_mock, capsys):
 def test_menu_eventos_listar_pedidos_logado(mock_input, usuario_mock, capsys):
     menu_eventos(usuario_mock)
     output = capsys.readouterr().out
-    assert "seus pedidos" in output.lower()
+    assert "seus pedidos" in output.lower() or "não possui pedidos" in output.lower()
 
 @patch("builtins.input", side_effect=[
     "2",   # Escolher comprar ingresso

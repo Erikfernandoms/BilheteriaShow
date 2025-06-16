@@ -2,13 +2,6 @@ import pytest
 from unittest.mock import patch, MagicMock
 from app.interface.produto import oferecer_produtos
 
-@pytest.fixture
-def produtos_mock():
-    return [
-        {"id_produto": 1, "nome": "Camiseta Oficial", "preco": 50.0, "estoque_disponivel": 10, "ativo": True},
-        {"id_produto": 2, "nome": "Boné", "preco": 25.0, "estoque_disponivel": 0, "ativo": True},
-        {"id_produto": 3, "nome": "Caneca", "preco": 30.0, "estoque_disponivel": 5, "ativo": False}
-    ]
 
 @patch("builtins.input", side_effect=[
     "3",   # Escolher produto
