@@ -226,9 +226,9 @@ python main.py
 ---
 
 ## 🚀 Documentação da API (FastAPI) no OpenAPI
-![
-    
-](images/image.png)
+![alt text](images/image.png)
+
+
 ### 1. Depois de executar o servidor do FastAPI
 ```bash
 uvicorn run:app --reload
@@ -241,7 +241,10 @@ http://localhost:8000/docs
 
 ---
 
+## 🚀 Valide a esteiras automatizadas de testes (CI) pós commits
 
+![alt text](images/image-ci.png)
+---
 ## 🧠 Funcionalidades
 
 - Autenticação de usuários (simples via ID e nome)
