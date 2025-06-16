@@ -31,4 +31,4 @@ jobs:
       run: uvicorn run:app --reload
       
     - name: Running TaaC - Interface
-        run: pytest tests/integration
+      run: pytest tests/integration
