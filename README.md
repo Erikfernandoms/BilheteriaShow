@@ -17,7 +17,7 @@ Documentação breve explicando suas decisões técnicas.
 ---
 
 # Arquitetura AWS:
-![alt text](<ArquiteturaAWS.png>)
+![alt text](<images/ArquiteturaAWS.jpg>)
 
 
 ## ☁️ Serviços AWS Utilizados
@@ -228,7 +228,7 @@ python main.py
 ## 🚀 Documentação da API (FastAPI) no OpenAPI
 ![
     
-](image.png)
+](images/image.png)
 ### 1. Depois de executar o servidor do FastAPI
 ```bash
 uvicorn run:app --reload
