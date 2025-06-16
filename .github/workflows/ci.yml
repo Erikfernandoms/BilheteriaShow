@@ -37,10 +37,10 @@ jobs:
         uvicorn run:app --port 8000 &
         sleep 5
 
-    - name: Inicializar banco de dados
+    - name: Init Database
       run: |
-        python -c "from init_db import init_db; init_db()"
-        
+        python -c "from database.init_db import init_db; init_db()"
+
     - name: Run Integration/TaaC Tests
       run: pytest tests/integrations
 
