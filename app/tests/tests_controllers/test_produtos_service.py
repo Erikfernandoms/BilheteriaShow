@@ -3,7 +3,6 @@ from app.controllers.produtos.produtos_service import (
     listar_produtos,
     listar_produtos_do_evento,
     associar_produto_ao_evento,
-    obter_produto,
     criar_produto,
     atualizar_produto,
     deletar_produto,
