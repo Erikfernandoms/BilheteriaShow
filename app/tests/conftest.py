@@ -10,6 +10,13 @@ class DummyEvento:
         self.data = data
         self.id_evento = id_evento
 
+class DummyPagamento:
+    def __init__(self, id_pedido, status, metodo_pagamento, valor_total):
+        self.id_pedido = id_pedido
+        self.status = status
+        self.metodo_pagamento = metodo_pagamento
+        self.valor_total = valor_total
+
 
 class DadosSetor:
     def __init__(self, nome, quantidade_lugares, preco_base, id_evento):
@@ -19,12 +26,51 @@ class DadosSetor:
         self.id_evento = id_evento
 
 
+
+@pytest.fixture
+def pagamento_aprovado():
+    return DummyPagamento(id_pedido=1, status="aprovado", metodo_pagamento="cartao", valor_total=300.0)
+
+@pytest.fixture
+def pagamento_recusado():
+    return DummyPagamento(id_pedido=1, status="recusado", metodo_pagamento="boleto", valor_total=300.0)
+
+
 @pytest.fixture
 def conn_mock():
     conn = MagicMock()
     conn.commit = MagicMock()
     conn.rollback = MagicMock()
     return conn
+
+@pytest.fixture
+def pedido_mock():
+    return {
+        "id_usuario": 1,
+        "id_evento": 2,
+        "setor": "VIP",
+        "cadeira": "A1",
+        "quantidade_ingressos": 2,
+        "valor_total": 300.00
+    }
+
+@pytest.fixture
+def usuario_mock():
+    return {
+        "id_usuario": 1,
+        "nome": "João da Silva",
+        "email": "joao@email.com"
+    }
+
+
+
+@pytest.fixture
+def produtos_mock():
+    return [
+        {"nome": "Camiseta", "quantidade": 1, "preco_unitario": 80.00},
+        {"nome": "Copo", "quantidade": 2, "preco_unitario": 30.00}
+    ]
+
 
 """
 Criação da tabela sem database em memória para testes rápidos
@@ -149,3 +195,5 @@ def delete_memory(conn):
     cursor.execute("DELETE FROM cadeira")
     cursor.execute("DELETE FROM setor_evento")
     cursor.execute("DELETE FROM pedido")
+
+
