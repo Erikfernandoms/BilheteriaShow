@@ -81,14 +81,14 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade_ingressos, cadeir
 
     print("Agora você pode adicionar produtos ao pedido.")
     oferecer_produtos(id_pedido, evento['id_evento'])
-    pedidos_pendentes = [pedido]
+    pedidos_reservados = [pedido]
     while True:
         print("\nDeseja finalizar a compra agora?")
         print("1 - Sim")
         print("2 - Não, finalizar depois")
         escolha = input("Escolha uma opção: ")
         if escolha == "1":
-            menu_pagamento(pedidos_pendentes)
+            menu_pagamento(pedidos_reservados)
             break
         elif escolha == "2":
             print("Você pode finalizar o pagamento depois em 'Meus pedidos'.")
@@ -125,29 +125,29 @@ def listar_pedidos(usuario_logado):
         print(f"Status: {pedido['status']} | Válido até: {pedido['reservado_ate']}")
         if pedido["setor"].lower() in ["cadeira inferior", "cadeira superior"]:
             print(f"Cadeiras: {pedido['cadeira']}")
-    pedidos_pendentes = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
-    if pedidos_pendentes:
-        menu_pagamento(pedidos_pendentes)
+    pedidos_reservados = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
+    if pedidos_reservados:
+        menu_pagamento(pedidos_reservados)
 
-def menu_pagamento(pedidos_pendentes):
+def menu_pagamento(pedidos_reservados):
     while True:
-        usuario_id = pedidos_pendentes[0]['id_usuario'] if pedidos_pendentes else None
+        usuario_id = pedidos_reservados[0]['id_usuario'] if pedidos_reservados else None
         if usuario_id:
             response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
             if response.status_code == 200:
                 pedidos = response.json()
-                pedidos_pendentes = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
+                pedidos_reservados = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
             else:
                 log_error("Não foi possível atualizar a lista de pedidos.")
                 print("\nNão foi possível atualizar a lista de pedidos.")
                 break
 
-        if not pedidos_pendentes:
-            print("\nNenhum pedido pendente de pagamento.")
+        if not pedidos_reservados:
+            print("\nNenhum pedido reservado de pagamento.")
             break
 
-        print("\nPedidos pendentes de pagamento:")
-        for pedido in pedidos_pendentes:
+        print("\nPedidos reservados de pagamento:")
+        for pedido in pedidos_reservados:
             evento_resp = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")
             nome_evento = evento_resp.json()['nome'] if evento_resp.status_code == 200 else f"Evento {pedido['id_evento']}"
 
@@ -175,15 +175,15 @@ def menu_pagamento(pedidos_pendentes):
             break
         try:
             id_pedido = int(escolha)
-            if any(pedido['id_pedido'] == id_pedido for pedido in pedidos_pendentes):
+            if any(pedido['id_pedido'] == id_pedido for pedido in pedidos_reservados):
                 finalizar_pagamento(id_pedido)
                 
                 response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
                 if response.status_code == 200:
                     pedidos = response.json()
-                    pedidos_pendentes = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
-                    if not pedidos_pendentes:
-                        print("\nNenhum pedido pendente de pagamento.")
+                    pedidos_reservados = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
+                    if not pedidos_reservados:
+                        print("\nNenhum pedido reservado de pagamento.")
                         break
                 else:
                     log_error("Não foi possível atualizar a lista de pedidos.")

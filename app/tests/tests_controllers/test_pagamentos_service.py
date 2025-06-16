@@ -4,19 +4,8 @@
 from app.controllers.pagamentos.pagamento_service import registrar_pagamento
 from unittest.mock import patch
 
-def setup_pedido_para_pagamento(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO usuario (nome, email, CPF, senha, telefone, cep)
-        VALUES ('Cliente', 'cliente@email.com', '00000000001', 'senha123', '11999999999', '01234-000')
-    """)
-    id_usuario = cursor.lastrowid
+from app.tests.conftest import setup_pedido_para_pagamento
 
-    cursor.execute("""
-        INSERT INTO pedido (id_usuario, id_evento, id_setor_evento, status, setor, cadeira, quantidade_ingressos, valor_total)
-        VALUES (?, 1, 1, 'pendente', 'VIP', 'A1', 2, 300.0)
-    """, (id_usuario,))
-    conn.commit()
 
 
 @patch("app.controllers.pagamentos.pagamento_service.gerar_nota_fiscal")

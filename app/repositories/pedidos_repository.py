@@ -137,7 +137,7 @@ def reservar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras):
     cursor = conn.cursor()
     for id_cadeira in lista_id_cadeiras:
         cursor.execute("""
-            UPDATE cadeira
+            UPDATE cadeira_do_setor
             SET reservada = 1
             WHERE id_cadeira = ? AND id_setor_evento = ? AND reservada = 0
         """, (id_cadeira, id_setor_evento))
@@ -149,7 +149,7 @@ def liberar_cadeiras_repository(conn, id_setor_evento, lista_id_cadeiras):
     cursor = conn.cursor()
     for id_cadeira in lista_id_cadeiras:
         cursor.execute("""
-            UPDATE cadeira
+            UPDATE cadeira_do_setor
             SET reservada = 0
             WHERE id_cadeira = ? AND id_setor_evento = ? AND reservada = 1
         """, (id_cadeira, id_setor_evento))

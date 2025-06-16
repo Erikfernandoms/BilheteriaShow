@@ -4,25 +4,8 @@ from app.repositories.pagamentos_repository import (
     inserir_pagamento_repository,
     atualizar_status_pedido_repository
 )
-from app.tests.conftest import DummyPagamento
+from app.tests.conftest import DummyPagamento, setup_pedido
 
-
-def setup_pedido(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO usuario (nome, email, CPF, senha, telefone, cep)
-        VALUES ('Usuário', 'user@email.com', '12345678900', 'senha123', '11999999999', '12345-000')
-    """)
-    id_usuario = cursor.lastrowid
-
-    cursor.execute("""
-        INSERT INTO pedido (
-            id_usuario, id_evento, id_setor_evento,
-            status, setor, cadeira,
-            quantidade_ingressos, valor_total
-        ) VALUES (?, 1, 1, 'pendente', 'VIP', 'A1', 2, 300.00)
-    """, (id_usuario,))
-    return cursor.lastrowid
 
 
 def test_inserir_pagamento_repository_aprovado(conn):
