@@ -84,7 +84,7 @@ def escolher_setor(setores, evento):
         print(f"Quantidade de lugares: {setor['quantidade_lugares']}")
         print(f"Preço base: R$ {setor['preco_base']:.2f}")
 
-    ids_validos = [str(s['id_setor_evento']) for s in setores_disponiveis]
+    ids_validos = [str(setor['id_setor_evento']) for setor in setores_disponiveis]
 
     while True:
         setor_id = input("\nDigite o ID do setor que deseja comprar ingresso (ou 'voltar' para cancelar): ")
@@ -94,7 +94,7 @@ def escolher_setor(setores, evento):
             print("Setor inválido. Tente novamente.")
             continue
         # Busca o setor na lista local, não na API
-        setor = next(s for s in setores_disponiveis if str(s['id_setor_evento']) == setor_id)
+        setor = next(setor for setor in setores_disponiveis if str(setor['id_setor_evento']) == setor_id)
         print(f"\nSetor selecionado: {setor['nome']}")
         return setor
 

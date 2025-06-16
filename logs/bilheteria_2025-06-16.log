@@ -1,0 +1,212 @@
+2025-06-16 13:12:08,255 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 13:14:01,175 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 13:16:23,691 [INFO] Pedido 3 criado para usuário 999.
+2025-06-16 13:18:57,302 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-16 13:19:27,323 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-16 13:19:53,785 [INFO] Conta do usuário Erik atualizada com sucesso.
+2025-06-16 13:19:58,840 [INFO] Conta do usuário Erik deletada com sucesso.
+2025-06-16 13:20:13,279 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-16 13:20:20,149 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-16 13:20:47,506 [INFO] Pedido 4 criado para usuário 9.
+2025-06-16 13:20:47,507 [INFO] Pedido reservado com sucesso! ID: 4
+2025-06-16 13:20:56,326 [INFO] Produto 1 adicionado ao pedido 4 com quantidade 20.
+2025-06-16 13:21:21,875 [INFO] Nota fiscal gerada para o pedido 4: notas_fiscais\nota_4.json
+2025-06-16 13:21:21,875 [INFO] Pagamento aprovado para o pedido 4. Nota fiscal gerada.
+2025-06-16 13:21:21,877 [INFO] Pagamento aprovado para pedido 4
+2025-06-16 13:22:10,373 [INFO] Pedido 5 criado para usuário 9.
+2025-06-16 13:22:10,376 [INFO] Pedido reservado com sucesso! ID: 5
+2025-06-16 13:23:07,942 [INFO] Cadeiras escolhidas: A2
+2025-06-16 13:23:09,982 [INFO] Pedido 6 criado para usuário 9.
+2025-06-16 13:23:09,983 [INFO] Pedido reservado com sucesso! ID: 6
+2025-06-16 13:23:33,089 [INFO] Cadeiras escolhidas: A3
+2025-06-16 13:23:35,130 [INFO] Pedido 7 criado para usuário 9.
+2025-06-16 13:23:35,131 [INFO] Pedido reservado com sucesso! ID: 7
+2025-06-16 13:27:20,639 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 13:48:04,247 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 13:48:04,247 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 13:48:04,247 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 13:48:04,247 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 13:48:04,247 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 13:48:04,247 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 13:48:19,900 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-16 13:48:38,246 [INFO] Pedido 8 criado para usuário 9.
+2025-06-16 13:48:38,251 [INFO] Pedido reservado com sucesso! ID: 8
+2025-06-16 13:49:04,251 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 13:49:04,251 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 13:49:04,251 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 13:49:04,251 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 13:49:04,251 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 13:49:04,251 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 13:55:17,374 [INFO] Pedido 9 criado para usuário 999.
+2025-06-16 13:56:23,169 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 13:56:23,169 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 13:56:23,169 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 13:56:23,169 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 13:56:23,169 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 13:56:23,169 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 13:56:30,281 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-16 13:56:49,282 [INFO] Cadeiras escolhidas: A1
+2025-06-16 13:56:51,345 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-16 13:57:14,079 [INFO] Pedido 10 criado para usuário 9.
+2025-06-16 13:57:14,082 [INFO] Pedido reservado com sucesso! ID: 10
+2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 13:58:37,455 [INFO] Pedido 11 criado para usuário 999.
+2025-06-16 14:07:02,924 [INFO] Produto 1 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:10:22,940 [INFO] Produto 2 adicionado ao pedido 999 com quantidade 1.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 8.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 9.
+2025-06-16 14:19:44,141 [INFO] Produto 8 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:20:21,538 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:20:56,136 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:21:52,827 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:26:59,649 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 14:26:59,649 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 14:26:59,649 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 8.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 9.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 10.
+2025-06-16 14:26:59,650 [INFO] Reserva expirada e cancelada para pedido 11.
+2025-06-16 14:27:32,079 [INFO] Usuário mendes (mendes2) cadastrado com sucesso.
+2025-06-16 14:27:44,131 [INFO] Usuário  () cadastrado com sucesso.
+2025-06-16 14:27:59,535 [INFO] Usuário mendes (mendes2) logado com sucesso.
+2025-06-16 14:27:59,652 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 8.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 9.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 10.
+2025-06-16 14:27:59,653 [INFO] Reserva expirada e cancelada para pedido 11.
+2025-06-16 14:28:59,694 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 14:28:59,694 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 14:28:59,694 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 14:28:59,695 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 14:28:59,695 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 14:28:59,695 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 14:28:59,695 [INFO] Reserva expirada e cancelada para pedido 8.
+2025-06-16 14:28:59,695 [INFO] Reserva expirada e cancelada para pedido 9.
+2025-06-16 14:28:59,695 [INFO] Reserva expirada e cancelada para pedido 10.
+2025-06-16 14:28:59,696 [INFO] Reserva expirada e cancelada para pedido 11.
+2025-06-16 14:29:19,793 [INFO] Pedido 12 criado para usuário 10.
+2025-06-16 14:29:19,794 [INFO] Pedido reservado com sucesso! ID: 12
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 8.
+2025-06-16 14:29:59,700 [INFO] Reserva expirada e cancelada para pedido 9.
+2025-06-16 14:29:59,701 [INFO] Reserva expirada e cancelada para pedido 10.
+2025-06-16 14:29:59,701 [INFO] Reserva expirada e cancelada para pedido 11.
+2025-06-16 14:31:18,552 [ERROR] Erro ao criar pedido: no such table: pedido
+2025-06-16 14:31:31,626 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 14:31:45,917 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 14:31:45,917 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 14:32:19,354 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 14:34:55,820 [INFO] Pedido 3 criado para usuário 999.
+2025-06-16 14:36:32,453 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-16 14:36:45,145 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-16 14:37:24,775 [INFO] Pedido 4 criado para usuário 1.
+2025-06-16 14:37:24,777 [INFO] Pedido reservado com sucesso! ID: 4
+2025-06-16 14:41:25,681 [INFO] Pedido 5 criado para usuário 999.
+2025-06-16 14:42:14,778 [INFO] Pedido 6 criado para usuário 999.
+2025-06-16 14:46:04,001 [INFO] Pedido 7 criado para usuário 999.
+2025-06-16 14:48:08,348 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 14:48:22,649 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 14:48:22,650 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 14:49:24,082 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 14:49:38,476 [INFO] Nota fiscal gerada para o pedido 2: notas_fiscais\nota_2.json
+2025-06-16 14:49:38,476 [INFO] Pagamento aprovado para o pedido 2. Nota fiscal gerada.
+2025-06-16 14:55:43,369 [INFO] Pedido 3 criado para usuário 999.
+2025-06-16 14:55:57,643 [INFO] Nota fiscal gerada para o pedido 3: notas_fiscais\nota_3.json
+2025-06-16 14:55:57,643 [INFO] Pagamento aprovado para o pedido 3. Nota fiscal gerada.
+2025-06-16 14:56:31,764 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 14:56:46,009 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 14:56:46,009 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 14:56:52,150 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 14:58:36,420 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 14:58:50,659 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 14:58:50,659 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 14:58:56,780 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 15:01:17,124 [ERROR] Erro ao criar pedido: no such table: pedido
+2025-06-16 15:01:57,490 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 15:02:03,616 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 15:02:22,007 [INFO] Nota fiscal gerada para o pedido 2: notas_fiscais\nota_2.json
+2025-06-16 15:02:22,007 [INFO] Pagamento aprovado para o pedido 2. Nota fiscal gerada.
+2025-06-16 15:02:34,283 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 15:06:10,625 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 15:06:16,746 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 15:06:33,096 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 15:09:03,069 [INFO] Pedido 3 criado para usuário 999.
+2025-06-16 15:09:09,212 [INFO] Pedido 4 criado para usuário 999.
+2025-06-16 15:36:06,706 [INFO] Pedido 5 criado para usuário 999.
+2025-06-16 15:37:35,829 [INFO] Pedido 1 criado para usuário 999.
+2025-06-16 15:37:41,949 [INFO] Pedido 2 criado para usuário 999.
+2025-06-16 15:38:00,321 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 15:38:00,321 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 15:43:21,899 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 15:43:36,134 [INFO] Nota fiscal gerada para o pedido 3: notas_fiscais\nota_3.json
+2025-06-16 15:43:36,134 [INFO] Pagamento aprovado para o pedido 3. Nota fiscal gerada.
+2025-06-16 15:44:29,525 [INFO] Pedido 4 criado para usuário 1.
+2025-06-16 15:44:43,800 [INFO] Nota fiscal gerada para o pedido 4: notas_fiscais\nota_4.json
+2025-06-16 15:44:43,800 [INFO] Pagamento aprovado para o pedido 4. Nota fiscal gerada.
+2025-06-16 15:44:47,886 [INFO] Pedido 5 criado para usuário 1.
+2025-06-16 15:45:02,170 [INFO] Nota fiscal gerada para o pedido 5: notas_fiscais\nota_5.json
+2025-06-16 15:45:02,170 [INFO] Pagamento aprovado para o pedido 5. Nota fiscal gerada.
+2025-06-16 15:45:43,849 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 15:45:49,972 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 15:46:08,286 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 15:46:08,286 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 16:01:00,167 [ERROR] Erro ao criar pedido: no such table: pedido
+2025-06-16 16:01:36,810 [ERROR] Erro ao criar pedido: no such table: pedido
+2025-06-16 16:02:05,856 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:02:42,965 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:03:02,585 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:08:47,743 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:11:31,143 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:12:55,751 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:33:33,841 [INFO] Pedido 5 criado para usuário 1.
+2025-06-16 16:35:04,598 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:35:56,510 [INFO] Usuário mendes (mendes) cadastrado com sucesso.
+2025-06-16 16:36:01,561 [INFO] Usuário mendes (mendes) logado com sucesso.
+2025-06-16 16:36:29,440 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:36:29,441 [INFO] Pedido reservado com sucesso! ID: 2
+2025-06-16 16:39:46,185 [INFO] Usuário mendes (mendes) logado com sucesso.
+2025-06-16 16:40:56,481 [INFO] Cadeiras escolhidas: A1
+2025-06-16 16:40:58,570 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:40:58,572 [INFO] Pedido reservado com sucesso! ID: 3
+2025-06-16 16:41:09,330 [INFO] Nota fiscal gerada para o pedido 3: notas_fiscais\nota_3.json
+2025-06-16 16:41:09,330 [INFO] Pagamento aprovado para o pedido 3. Nota fiscal gerada.
+2025-06-16 16:41:09,333 [INFO] Pagamento aprovado para pedido 3
+2025-06-16 16:41:22,482 [INFO] Pedido 4 criado para usuário 1.
+2025-06-16 16:41:30,631 [INFO] Nota fiscal gerada para o pedido 4: notas_fiscais\nota_4.json
+2025-06-16 16:41:30,631 [INFO] Pagamento aprovado para o pedido 4. Nota fiscal gerada.
+2025-06-16 16:43:07,826 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:43:16,028 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 16:43:16,028 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 16:43:26,245 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:44:30,651 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:44:42,916 [INFO] Pedido 4 criado para usuário 1.
+2025-06-16 16:44:51,105 [INFO] Nota fiscal gerada para o pedido 4: notas_fiscais\nota_4.json
+2025-06-16 16:44:51,105 [INFO] Pagamento aprovado para o pedido 4. Nota fiscal gerada.
+2025-06-16 16:45:01,307 [INFO] Pedido 5 criado para usuário 1.
+2025-06-16 16:45:09,509 [INFO] Nota fiscal gerada para o pedido 5: notas_fiscais\nota_5.json
+2025-06-16 16:45:09,510 [INFO] Pagamento aprovado para o pedido 5. Nota fiscal gerada.
+2025-06-16 16:45:13,633 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
