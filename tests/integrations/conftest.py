@@ -60,3 +60,14 @@ def setor_mock_pista():
 def setor_mock_cadeiras():
     return {"id_setor_evento": 2, "nome": "Cadeiras", "preco_base": 150.0}
 
+class DummyPedido:
+    def __init__(self, id_usuario, id_evento, id_setor_evento, status, setor, cadeira, quantidade_ingressos, valor_total, reservado_ate):
+        self.id_usuario = id_usuario
+        self.id_evento = id_evento
+        self.id_setor_evento = id_setor_evento
+        self.status = status
+        self.setor = setor
+        self.cadeira = cadeira
+        self.quantidade_ingressos = quantidade_ingressos
+        self.valor_total = valor_total
+        self.reservado_ate = reservado_ate

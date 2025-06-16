@@ -88,7 +88,7 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade_ingressos, cadeir
         print("2 - Não, finalizar depois")
         escolha = input("Escolha uma opção: ")
         if escolha == "1":
-            menu_pagamento(pedidos_reservados)
+            finalizar_pagamento(id_pedido)
             break
         elif escolha == "2":
             print("Você pode finalizar o pagamento depois em 'Meus pedidos'.")
@@ -127,9 +127,10 @@ def listar_pedidos(usuario_logado):
             print(f"Cadeiras: {pedido['cadeira']}")
     pedidos_reservados = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
     if pedidos_reservados:
-        menu_pagamento(pedidos_reservados)
+        menu_pagamento_pedidos_reservados(pedidos_reservados)
 
-def menu_pagamento(pedidos_reservados):
+
+def menu_pagamento_pedidos_reservados(pedidos_reservados):
     while True:
         usuario_id = pedidos_reservados[0]['id_usuario'] if pedidos_reservados else None
         if usuario_id:

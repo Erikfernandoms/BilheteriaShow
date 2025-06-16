@@ -174,3 +174,31 @@
 2025-06-16 15:45:49,972 [INFO] Pedido 2 criado para usuário 1.
 2025-06-16 15:46:08,286 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
 2025-06-16 15:46:08,286 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 16:01:00,167 [ERROR] Erro ao criar pedido: no such table: pedido
+2025-06-16 16:01:36,810 [ERROR] Erro ao criar pedido: no such table: pedido
+2025-06-16 16:02:05,856 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:02:42,965 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:03:02,585 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:08:47,743 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:11:31,143 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:12:55,751 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:33:33,841 [INFO] Pedido 5 criado para usuário 1.
+2025-06-16 16:35:04,598 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:35:56,510 [INFO] Usuário mendes (mendes) cadastrado com sucesso.
+2025-06-16 16:36:01,561 [INFO] Usuário mendes (mendes) logado com sucesso.
+2025-06-16 16:36:29,440 [INFO] Pedido 2 criado para usuário 1.
+2025-06-16 16:36:29,441 [INFO] Pedido reservado com sucesso! ID: 2
+2025-06-16 16:39:46,185 [INFO] Usuário mendes (mendes) logado com sucesso.
+2025-06-16 16:40:56,481 [INFO] Cadeiras escolhidas: A1
+2025-06-16 16:40:58,570 [INFO] Pedido 3 criado para usuário 1.
+2025-06-16 16:40:58,572 [INFO] Pedido reservado com sucesso! ID: 3
+2025-06-16 16:41:09,330 [INFO] Nota fiscal gerada para o pedido 3: notas_fiscais\nota_3.json
+2025-06-16 16:41:09,330 [INFO] Pagamento aprovado para o pedido 3. Nota fiscal gerada.
+2025-06-16 16:41:09,333 [INFO] Pagamento aprovado para pedido 3
+2025-06-16 16:41:22,482 [INFO] Pedido 4 criado para usuário 1.
+2025-06-16 16:41:30,631 [INFO] Nota fiscal gerada para o pedido 4: notas_fiscais\nota_4.json
+2025-06-16 16:41:30,631 [INFO] Pagamento aprovado para o pedido 4. Nota fiscal gerada.
+2025-06-16 16:43:07,826 [INFO] Pedido 1 criado para usuário 1.
+2025-06-16 16:43:16,028 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-16 16:43:16,028 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-16 16:43:26,245 [INFO] Pedido 2 criado para usuário 1.
