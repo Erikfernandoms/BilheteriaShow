@@ -55,3 +55,17 @@
 2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 5.
 2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 6.
 2025-06-16 13:57:23,174 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 13:58:37,455 [INFO] Pedido 11 criado para usuário 999.
+2025-06-16 14:07:02,924 [INFO] Produto 1 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:10:22,940 [INFO] Produto 2 adicionado ao pedido 999 com quantidade 1.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 1.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 3.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 5.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 6.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 7.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 8.
+2025-06-16 14:11:58,919 [INFO] Reserva expirada e cancelada para pedido 9.
+2025-06-16 14:19:44,141 [INFO] Produto 8 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:20:21,538 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
+2025-06-16 14:20:56,136 [INFO] Produto 9 adicionado ao pedido 999 com quantidade 2.
