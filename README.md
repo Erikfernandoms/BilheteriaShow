@@ -16,6 +16,7 @@ Documentação breve explicando suas decisões técnicas.
 
 ---
 
+
 # Arquitetura AWS:
 ![alt text](<images/ArquiteturaAWS.jpg>)
 
@@ -35,6 +36,55 @@ Documentação breve explicando suas decisões técnicas.
 | WAF + Shield      | Proteção contra ataques como DDoS e SQL Injection           |
 | CloudWatch + X-Ray| Observabilidade e tracing distribuído                       |
 | QuickSight        | Dashboards analíticos via RDS replica ou arquivos do S3     |
+
+---
+
+## 🏦 Alinhamento com o Modelo Arquitetural do Itaú
+
+A solução foi estruturada com base no modelo de arquitetura do Itaú Unibanco, dividido em três camadas: **Core**, **Experiência** e **Canais Digitais**. Essa abordagem promove clareza de responsabilidades, consistência entre camadas e confiabilidade para escalar com segurança.
+
+---
+
+### 🔶 Camada Core — *“Coração do negócio”*  
+> Onde vivem as regras críticas, transações e a persistência confiável dos dados.
+
+- Aplica regras de negócio como confirmação de pedidos e geração de nota fiscal.  
+- Garante consistência e integridade dos dados com transações ACID no PostgreSQL.  
+- Desacoplada dos canais, foca na robustez da lógica central.  
+- Altamente disponível com RDS Multi-AZ, Proxy e Read Replica.
+
+**🔧 Pilar da Engenharia**  
+- Arquitetura modular e escalável com uso das melhores práticas AWS.  
+- Robustez transacional com PostgreSQL e controle de concorrência.  
+- Observabilidade implementada com logs, métricas e tracing distribuído (X-Ray).
+
+---
+
+### 🟧 Camada de Experiência — *“Onde a jornada do cliente acontece”*  
+> Traduz regras de negócio em experiências fluídas, claras e eficientes.
+
+- Implementada com ECS + API Gateway (BFF), conectando serviços com simplicidade.  
+- Abstrai a complexidade do core com APIs REST bem definidas e documentadas.  
+- Garante fluidez na jornada de reserva, confirmação de ingressos e compra de produtos.
+
+**🚀 Pilar da Transformação**  
+- Arquitetura pronta para evolução, com camada desacoplada de geração de NFe.  
+- Simulação local por CLI para desenvolvimento ágil e testes rápidos.  
+- Preparada para integração com camadas analíticas e de insights via SOR.
+
+---
+
+### 🟨 Camada de Canais Digitais — *“Contato direto com o cliente”*  
+> Responsável por entregar a experiência final nos canais web e mobile.
+
+- Microfrontend hospedado em S3 + CloudFront, com autenticação via Cognito.  
+- Proteção com WAF e AWS Shield contra ataques e acesso indevido.  
+- Coleta de comportamento e preparada para análises via QuickSight.
+
+**👥 Pilar de Pessoas**  
+- Organização clara para facilitar o onboarding e a colaboração entre times.  
+- Testes de integração e documentação completa garantem segurança no ciclo de entrega.  
+- Frontend desacoplado permite múltiplos canais com experiência unificada.
 
 ---
 
@@ -278,24 +328,6 @@ http://localhost:8000/docs
 
 ---
 
-## 🏦 Alinhamento com os Pilares do Itaú
-
-**Engenharia**  
-- Estrutura modular e escalável baseada em boas práticas AWS  
-- Uso de PostgreSQL com RDS Proxy para garantir robustez transacional  
-- Aplicação de observabilidade com tracing distribuído
-
-**Transformação**  
-- Arquitetura serverless com integração desacoplada de notas fiscais  
-- Simulação local via CLI para rápida prototipação e testes  
-- Infraestrutura apta para evolução com camada analítica (SOR)
-
-**Pessoas**  
-- Organização clara e didática para onboarding de novos devs  
-- Testes de integração e documentação para colaboração segura  
-- Frontend desacoplado para múltiplos canais de acesso
-
----
 
 ## ✍️ Autor
 
