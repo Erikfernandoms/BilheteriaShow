@@ -197,8 +197,8 @@ Sistema de bilhetagem completo para eventos, desenvolvido em Python com uma arqu
 
 ## 🧱 Funcionalidades
 - Cadastro e listagem de eventos, produtos e setores
-- Criptografia de senha
-- Sistema de reservas com bloqueio temporário (15 minutos)
+- Autenticação de usuário com criptografia de senha (login/cadatro)
+- Sistema de reservas com bloqueio temporário (15 minutos) - por setor e cadeira.
 - Assentos numerados (cadeiras) e setores de pista
 - Adição de produtos opcionais ao pedido
 - Pagamento com simulação de diferentes métodos (PIX, cartão, boleto)
@@ -296,18 +296,6 @@ http://localhost:8000/docs
 ## 🚀 Valide a esteiras automatizadas de testes (CI) pós commits
 
 ![alt text](images/image-ci.png)
----
-## 🧠 Funcionalidades
-
-- Autenticação de usuários (simples via ID e nome)
-- Listagem de eventos e setores
-- Reserva temporária de ingressos (15 minutos)
-- Adição de produtos adicionais à compra (ex: pipoca, refrigerante)
-- Geração de pedidos com persistência
-- Expiração automática de reservas não finalizadas
-- Visualização de pedidos
-- Emissão de notas fiscais (simulada)
-- Coleta de métricas de uso (acessos a setores, pedidos por status)
 
 ---
 
@@ -326,7 +314,7 @@ http://localhost:8000/docs
 
 ## 📌 Considerações
 
-- Todo o código simula um comportamento real de microserviços e API Gateway por meio de organização de módulos, que foi orçado na arquitetura AWS incial.
+- Todo o código simula um comportamento real de microserviços e API Gateway por meio de organização de módulos, que foram orçados na arquitetura AWS incial.
 
 ---
 
