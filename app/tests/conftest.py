@@ -46,6 +46,25 @@ class DummyPedido:
         self.valor_total = valor_total
         self.reservado_ate = reservado_ate
     
+class DummyUsuario:
+    def __init__(self, nome, email, cpf, senha, telefone, cep):
+        self.nome = nome
+        self.email = email
+        self.cpf = cpf
+        self.senha = senha
+        self.telefone = telefone
+        self.cep = cep
+
+@pytest.fixture
+def usuario_valido():
+    return DummyUsuario(
+        nome="Maria",
+        email="maria@email.com",
+        cpf="12345678900",
+        senha="senha123",
+        telefone="11999999999",
+        cep="01234-000"
+    )
 
 
 @pytest.fixture

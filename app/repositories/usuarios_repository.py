@@ -3,8 +3,8 @@ import sqlite3
 def listar_usuarios_repository(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM usuario")
-    usuarios = cursor.fetchall()
-    return usuarios
+    colunas = [desc[0] for desc in cursor.description]
+    return [dict(zip(colunas, row)) for row in cursor.fetchall()]
 
 def criar_usuario_repository(conn, usuario):
     try:
