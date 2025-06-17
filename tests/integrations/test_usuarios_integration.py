@@ -31,7 +31,7 @@ def test_login_usuario(mock_input):
 
 
 @patch("builtins.input", side_effect=[
-    "Usuário Atualizado", "usuario@teste.com", "123456", "12345678900", "11999999999", "01001000"
+    "Usuário Atualizado", "usuario@teste.com", "123456", "43853556817", "11999999999", "01001000"
 ])
 def test_atualizar_usuario(mock_input):
     # Cadastro prévio do usuário
