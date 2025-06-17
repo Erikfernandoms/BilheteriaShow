@@ -1,0 +1,19 @@
+{
+    "numero_nota": "NFS-000003",
+    "data_emissao": "2025-06-17T14:43:08.596689",
+    "cliente": {
+        "id": 1,
+        "nome": "Erik",
+        "email": "mendes"
+    },
+    "produtos": [],
+    "ingresso": {
+        "evento": "Rock in Rio",
+        "setor": "Camarote",
+        "quantidade_ingressos": 1,
+        "cadeira": null,
+        "valor_total": 350
+    },
+    "total": 350,
+    "mensagem": "Nota fiscal gerada automaticamente após pagamento."
+}

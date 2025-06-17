@@ -5,9 +5,14 @@ from app.interface.usuarios import cadastrar_usuario
 from app.interface.usuarios import login
 from database.init_db import init_db
 import sys
-
+import os
 from threading import Thread
 from app.jobs.limpeza import rotina_limpeza_pedidos  # se salvar num módulo separado
+
+os.environ["NO_PROXY"] = "localhost,127.0.0.1"
+
+sys.stdout.reconfigure(encoding="utf-8")
+
 
 def menu_principal(usuario_logado):
     init_db()

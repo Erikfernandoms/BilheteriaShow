@@ -31,7 +31,7 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade_ingressos, cadeir
     cadeira_str = cadeira
 
     if setor['nome'].lower() in ["cadeira inferior", "cadeira superior"]:
-        response = requests.get(f"http://localhost:8000/eventos/setores/{setor['id_setor_evento']}/cadeiras/disponiveis")
+        response = requests.get(f"http://localhost:8000/eventos/setores/{setor['id_setor_evento']}/cadeiras/disponiveis", verify=False)
         if response.status_code != 200:
             log_error("Não foi possível buscar as cadeiras disponíveis.")
             print("Não foi possível buscar as cadeiras disponíveis.")
@@ -59,7 +59,8 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade_ingressos, cadeir
             "quantidade_ingressos": int(quantidade_ingressos),
             "valor_total": float(setor['preco_base']) * int(quantidade_ingressos),
             "reservado_ate": data_reserva.strftime("%Y-%m-%d %H:%M:%S")
-        }
+        }, 
+        verify=False
     )
     if response.status_code not in (200, 201):
         try:
@@ -97,7 +98,7 @@ def reserva_ingresso(usuario_logado, evento, setor, quantidade_ingressos, cadeir
             print("Opção inválida.")
 
 def listar_pedidos(usuario_logado):
-    response = requests.get(f"http://localhost:8000/pedidos/{usuario_logado['id_usuario']}/usuarios")
+    response = requests.get(f"http://localhost:8000/pedidos/{usuario_logado['id_usuario']}/usuarios", verify=False)
     if response.status_code == 404:
         print("\nVocê ainda não possui pedidos.")
         return
@@ -113,7 +114,7 @@ def listar_pedidos(usuario_logado):
 
     print("\nSeus pedidos:")
     for pedido in pedidos:
-        response = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")
+        response = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}", verify=False)
         if response.status_code != 200:
             log_error("Erro ao buscar detalhes do evento.")
             print("\nErro ao buscar detalhes do evento.")
@@ -134,7 +135,7 @@ def menu_pagamento_pedidos_reservados(pedidos_reservados):
     while True:
         usuario_id = pedidos_reservados[0]['id_usuario'] if pedidos_reservados else None
         if usuario_id:
-            response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
+            response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios", verify=False)
             if response.status_code == 200:
                 pedidos = response.json()
                 pedidos_reservados = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
@@ -149,7 +150,7 @@ def menu_pagamento_pedidos_reservados(pedidos_reservados):
 
         print("\nPedidos reservados aguardando pagamento:")
         for pedido in pedidos_reservados:
-            evento_resp = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}")
+            evento_resp = requests.get(f"http://localhost:8000/eventos/{pedido['id_evento']}", verify=False)
             nome_evento = evento_resp.json()['nome'] if evento_resp.status_code == 200 else f"Evento {pedido['id_evento']}"
 
             print(f"\nPedido ID: {pedido['id_pedido']} | Evento: {nome_evento}")
@@ -159,7 +160,7 @@ def menu_pagamento_pedidos_reservados(pedidos_reservados):
             if pedido["setor"].lower() in ["cadeira inferior", "cadeira superior"]:
                 print(f"Cadeiras: {pedido['cadeira']}")
 
-            produtos_resp = requests.get(f"http://localhost:8000/pedidos/{pedido['id_pedido']}/produtos")
+            produtos_resp = requests.get(f"http://localhost:8000/pedidos/{pedido['id_pedido']}/produtos", verify=False)
             if produtos_resp.status_code == 200:
                 produtos = produtos_resp.json()
                 if produtos:
@@ -179,7 +180,7 @@ def menu_pagamento_pedidos_reservados(pedidos_reservados):
             if any(pedido['id_pedido'] == id_pedido for pedido in pedidos_reservados):
                 finalizar_pagamento(id_pedido)
                 
-                response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios")
+                response = requests.get(f"http://localhost:8000/pedidos/{usuario_id}/usuarios", verify=False)
                 if response.status_code == 200:
                     pedidos = response.json()
                     pedidos_reservados = [pedido for pedido in pedidos if pedido['status'] == 'reservado']
@@ -211,10 +212,11 @@ def finalizar_pagamento(id_pedido):
             print("Opção inválida.")
 
     print("\nProcessando pagamento...")
-    response = requests.post("http://localhost:8000/pagamentos/mock")
-    status_pagamento = "aprovado" if response.status_code == 200 and response.json()["status"] == "aprovado" else "recusado"
+    response = requests.post("http://localhost:8000/pagamentos/mock", verify=False)
+    data = response.json()
+    status_pagamento = "aprovado" if response.status_code == 200 and isinstance(data, dict) and data.get("status") == "aprovado" else "recusado"
 
-    pedido_resp = requests.get(f"http://localhost:8000/pedidos/{id_pedido}")
+    pedido_resp = requests.get(f"http://localhost:8000/pedidos/{id_pedido}", verify=False)
     if pedido_resp.status_code == 200:
         pedido = pedido_resp.json()
         valor_total = pedido["valor_total"]
@@ -228,7 +230,8 @@ def finalizar_pagamento(id_pedido):
             "status": status_pagamento,
             "metodo_pagamento": metodo_pagamento,
             "valor_total": valor_total
-        }
+        }, 
+        verify=False
     )
     if status_pagamento == "aprovado" and response.status_code == 201:
         log_info(f"Pagamento aprovado para pedido {id_pedido}")

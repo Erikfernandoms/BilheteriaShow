@@ -1,7 +1,7 @@
 import requests
 
 def oferecer_produtos(pedido_id, id_evento):
-    response = requests.get(f"http://localhost:8000/produtos/eventos/{id_evento}/produtos")
+    response = requests.get(f"http://localhost:8000/produtos/eventos/{id_evento}/produtos", verify=False)
     if response.status_code != 200:
         print("\nNão foi possível recuperar os produtos.")
         return
@@ -41,7 +41,8 @@ def oferecer_produtos(pedido_id, id_evento):
             continue
         reponse = requests.post(
             f"http://localhost:8000/produtos/{pedido_id}/produtos",
-            json={"id_produto": produto["id_produto"], "quantidade": qtd}
+            json={"id_produto": produto["id_produto"], "quantidade": qtd},
+            verify=False
         )
         if reponse.status_code in (200, 201):
             print(f"Produto '{produto['nome']}' adicionado ao pedido!")

@@ -36,6 +36,7 @@ Documentação breve explicando suas decisões técnicas.
 | WAF + Shield      | Proteção contra ataques como DDoS e SQL Injection           |
 | CloudWatch + X-Ray| Observabilidade e tracing distribuído                       |
 | QuickSight        | Dashboards analíticos via RDS replica ou arquivos do S3     |
+| Broker            | Dashboards analíticos via RDS replica ou arquivos do S3     |
 
 ---
 
@@ -179,6 +180,49 @@ Funcionalidades como geração de nota fiscal e expiração são tratadas por La
 
 ---
 
+## 🧠 Estratégias Inteligentes e Resilientes
+
+### 💡 Amazon Bedrock — Personalização inteligente com IA Generativa
+
+> Reforçando os pilares de **Transformação** e **Pessoas**
+
+A arquitetura está preparada para evoluir com componentes de inteligência artificial usando modelos fundacionais (FMs). Com o **Amazon Bedrock**, é possível:
+- Analisar o perfil do cliente no momento do pedido
+- Sugerir produtos adicionais ou cupons personalizados com base em comportamento anterior
+- Implementar campanhas dinâmicas de engajamento (ex: ofertas específicas para pedidos em grupo ou eventos especiais)
+
+**Por que da decisão?**
+- Acesso a modelos de IA de alto desempenho (Anthropic, Cohere, AI21, Amazon Titan)
+- Totalmente gerenciado, sem necessidade de provisionar ou treinar modelos
+- Integração via API com as tasks ECS ou Lambdas
+- Escalável sob demanda, com controle de uso e faturamento por consumo
+- Suporta jornadas personalizadas com segurança e privacidade
+
+### 🛡️ Circuit Breaker — Resiliência para APIs externas (ex: pagamentos)
+
+> Alinhado com os pilares de **Engenharia** e **Experiência**
+
+A integração com serviços externos, como a API de pagamento, utiliza o padrão **Circuit Breaker**, garantindo resiliência em casos de falhas e indisponibilidade.
+
+**Por que da decisão?**
+- Previne chamadas excessivas para sistemas instáveis ou indisponíveis
+- Evita que falhas externas comprometam a experiência do cliente
+- Possibilita fallback (resposta temporária ou fila de retentativas)
+- Integrado com métricas e alarmes via **CloudWatch**
+- Fácil implementação em ECS
+
+**Funcionamento básico:**
+
+1. A API de pagamento é monitorada por tempo de resposta e taxa de erro
+2. Em caso de falhas repetidas, o circuito é "aberto"
+3. Durante esse tempo, a aplicação evita novas chamadas externas
+4. Após um intervalo, pequenas requisições são testadas ("half-open")
+5. Se recuperado, o circuito volta ao estado normal
+
+Essa estratégia garante **alta disponibilidade**, mesmo em cenários de falha parcial, protegendo o core do sistema e mantendo uma boa experiência de uso.
+
+---
+
 ### 📊 Relação entre Número de Usuários e Custo (Arquitetura AWS)
 
 | Nº de Usuários | Custo Mensal (USD) | Custo Anual (USD) |
@@ -212,7 +256,7 @@ Sistema de bilhetagem completo para eventos, desenvolvido em Python com uma arqu
 - Interface totalmente baseada em terminal
 - Geração de logs
 - Coleta de métricas de uso (acessos a setores, pedidos por status)
-
+- Circuit Breaker para api externa de pagamentos
 ---
 
 ## 🧱 Arquitetura e Estrutura
@@ -309,6 +353,7 @@ http://localhost:8000/docs
 - Cobertura de testes de integração para simular jornada completa
 - Criptografia de dados
 - Esteira de CI no GitHub para rodar testes automatizados e garantir a integridade do código
+- Cricuit Breaker para evitar chamadas a api externas com problemas
 
 ---
 

@@ -1,7 +1,8 @@
 {
-  "pedidos_criados": 105,
+  "pedidos_criados": 127,
   "produtos_adicionados_pedido": 35,
   "notas_fiscais_geradas": 7,
-  "pagamentos_aprovados": 25,
-  "pedidos_expirados": 3
+  "pagamentos_aprovados": 30,
+  "pedidos_expirados": 3,
+  "pagamentos_recusados": 17
 }
