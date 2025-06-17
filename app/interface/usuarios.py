@@ -30,7 +30,7 @@ def menu_conta(usuario_logado):
 def login():
     email = input("\nDigite o seu email: ")
     
-    response = requests.get("http://localhost:8000/usuarios/"+email)
+    response = requests.get("http://localhost:8000/usuarios/"+email, verify=False)
     if response.status_code == 200:
         usuarios = response.json()
         senha = input("\nDigite a sua senha: ")
@@ -71,7 +71,7 @@ def atualizar_conta(usuario_logado):
         "cep": cep
     }
     id = usuario_logado["id_usuario"]
-    response = requests.put(f"http://localhost:8000/usuarios/{id}", json=usuario_logado_alterado)
+    response = requests.put(f"http://localhost:8000/usuarios/{id}", json=usuario_logado_alterado, verify=False)
     if response.status_code == 200:
         print("\nConta atualizada com sucesso!")
         usuario_logado = response.json()
@@ -84,7 +84,7 @@ def atualizar_conta(usuario_logado):
 
 def deletar_conta(usuario_logado):
     id = usuario_logado["id_usuario"]
-    response = requests.delete(f"http://localhost:8000/usuarios/{id}")
+    response = requests.delete(f"http://localhost:8000/usuarios/{id}", verify=False)
     if response.status_code == 200:
         print("\nConta deletada com sucesso!")
         log_info(f"Conta do usuário {usuario_logado['nome']} deletada com sucesso.")
@@ -103,7 +103,7 @@ def cadastrar_usuario():
     telefone = input("Digite o seu telefone: ")
     cep = input("Digite o seu CEP: ")
 
-    senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
+    senha_hash = bcrypt.hashpw(senha.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     usuario_data = {
         "nome": nome,
@@ -113,8 +113,15 @@ def cadastrar_usuario():
         "telefone": telefone,
         "cep": cep
     }
+    def cpf_valido(cpf: str) -> bool:
+        cpf = ''.join(filter(str.isdigit, cpf))
+        return len(cpf) == 11
+    
+    if not cpf_valido(cpf):
+        print("❌ CPF inválido. Digite 11 números com ou sem máscara.")
+        return
 
-    response = requests.post("http://localhost:8000/usuarios/", json=usuario_data)
+    response = requests.post("http://localhost:8000/usuarios/", json=usuario_data, verify=False)
     if response.status_code in (201, 200):
         print("\nConta criada com sucesso!")
         log_info(f"Usuário {nome} ({email}) cadastrado com sucesso.")

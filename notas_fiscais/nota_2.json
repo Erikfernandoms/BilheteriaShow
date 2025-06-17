@@ -1,0 +1,19 @@
+{
+    "numero_nota": "NFS-000002",
+    "data_emissao": "2025-06-17T14:47:51.231636",
+    "cliente": {
+        "id": 1,
+        "nome": "Erik",
+        "email": "mendes"
+    },
+    "produtos": [],
+    "ingresso": {
+        "evento": "Show do Coldplay",
+        "setor": "Pista",
+        "quantidade_ingressos": 1,
+        "cadeira": null,
+        "valor_total": 125
+    },
+    "total": 125,
+    "mensagem": "Nota fiscal gerada automaticamente após pagamento."
+}

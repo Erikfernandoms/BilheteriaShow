@@ -1,0 +1,105 @@
+2025-06-17 14:28:56,887 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-17 14:29:04,161 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 14:29:35,999 [INFO] Pedido 1 criado para usuário 1.
+2025-06-17 14:29:36,001 [INFO] Pedido reservado com sucesso! ID: 1
+2025-06-17 14:29:47,643 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-17 14:29:47,643 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-17 14:29:47,647 [INFO] Pagamento aprovado para pedido 1
+2025-06-17 14:30:19,427 [INFO] Pedido 2 criado para usuário 1.
+2025-06-17 14:30:19,430 [INFO] Pedido reservado com sucesso! ID: 2
+2025-06-17 14:35:09,185 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 14:42:35,926 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 14:42:51,121 [INFO] Pedido 3 criado para usuário 1.
+2025-06-17 14:42:51,123 [INFO] Pedido reservado com sucesso! ID: 3
+2025-06-17 14:43:08,610 [INFO] Nota fiscal gerada para o pedido 3: notas_fiscais\nota_3.json
+2025-06-17 14:43:08,610 [INFO] Pagamento aprovado para o pedido 3. Nota fiscal gerada.
+2025-06-17 14:43:08,613 [INFO] Pagamento aprovado para pedido 3
+2025-06-17 14:47:14,882 [INFO] Reserva expirada e cancelada para pedido 2.
+2025-06-17 14:47:21,860 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 14:47:51,241 [INFO] Nota fiscal gerada para o pedido 2: notas_fiscais\nota_2.json
+2025-06-17 14:47:51,241 [INFO] Pagamento aprovado para o pedido 2. Nota fiscal gerada.
+2025-06-17 14:47:51,244 [INFO] Pagamento aprovado para pedido 2
+2025-06-17 14:48:29,699 [INFO] Pedido 4 criado para usuário 1.
+2025-06-17 14:48:29,701 [INFO] Pedido reservado com sucesso! ID: 4
+2025-06-17 14:52:17,759 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 14:52:48,348 [ERROR] Pagamento recusado para o pedido 4.
+2025-06-17 14:52:48,351 [ERROR] Pagamento recusado para pedido 4
+2025-06-17 14:53:22,622 [INFO] Pedido 5 criado para usuário 1.
+2025-06-17 14:53:22,624 [INFO] Pedido reservado com sucesso! ID: 5
+2025-06-17 14:53:33,828 [ERROR] Pagamento recusado para o pedido 5.
+2025-06-17 14:53:33,831 [ERROR] Pagamento recusado para pedido 5
+2025-06-17 14:53:51,809 [INFO] Pedido 6 criado para usuário 1.
+2025-06-17 14:53:51,811 [INFO] Pedido reservado com sucesso! ID: 6
+2025-06-17 14:54:02,334 [ERROR] Pagamento recusado para o pedido 6.
+2025-06-17 14:54:02,337 [ERROR] Pagamento recusado para pedido 6
+2025-06-17 14:54:56,845 [INFO] Pedido 7 criado para usuário 1.
+2025-06-17 14:54:56,847 [INFO] Pedido reservado com sucesso! ID: 7
+2025-06-17 14:55:07,500 [INFO] Nota fiscal gerada para o pedido 7: notas_fiscais\nota_7.json
+2025-06-17 14:55:07,500 [INFO] Pagamento aprovado para o pedido 7. Nota fiscal gerada.
+2025-06-17 14:55:07,503 [INFO] Pagamento aprovado para pedido 7
+2025-06-17 14:55:29,529 [INFO] Pedido 8 criado para usuário 1.
+2025-06-17 14:55:29,531 [INFO] Pedido reservado com sucesso! ID: 8
+2025-06-17 14:55:39,990 [ERROR] Pagamento recusado para o pedido 8.
+2025-06-17 14:55:39,993 [ERROR] Pagamento recusado para pedido 8
+2025-06-17 14:55:52,665 [INFO] Pedido 9 criado para usuário 1.
+2025-06-17 14:55:52,667 [INFO] Pedido reservado com sucesso! ID: 9
+2025-06-17 14:56:02,729 [ERROR] Pagamento recusado para o pedido 9.
+2025-06-17 14:56:02,732 [ERROR] Pagamento recusado para pedido 9
+2025-06-17 14:56:14,960 [INFO] Pedido 10 criado para usuário 1.
+2025-06-17 14:56:14,962 [INFO] Pedido reservado com sucesso! ID: 10
+2025-06-17 14:56:25,285 [ERROR] Pagamento recusado para o pedido 10.
+2025-06-17 14:56:25,287 [ERROR] Pagamento recusado para pedido 10
+2025-06-17 14:56:49,508 [INFO] Pedido 11 criado para usuário 1.
+2025-06-17 14:56:49,510 [INFO] Pedido reservado com sucesso! ID: 11
+2025-06-17 14:56:59,300 [ERROR] Pagamento recusado para o pedido 11.
+2025-06-17 14:56:59,303 [ERROR] Pagamento recusado para pedido 11
+2025-06-17 14:57:14,081 [INFO] Pedido 12 criado para usuário 1.
+2025-06-17 14:57:14,083 [INFO] Pedido reservado com sucesso! ID: 12
+2025-06-17 14:57:25,788 [ERROR] Pagamento recusado para o pedido 12.
+2025-06-17 14:57:25,793 [ERROR] Pagamento recusado para pedido 12
+2025-06-17 14:58:56,232 [INFO] Pedido 13 criado para usuário 1.
+2025-06-17 14:58:56,234 [INFO] Pedido reservado com sucesso! ID: 13
+2025-06-17 14:59:07,292 [ERROR] Pagamento recusado para o pedido 13.
+2025-06-17 14:59:07,295 [ERROR] Pagamento recusado para pedido 13
+2025-06-17 14:59:29,384 [INFO] Pedido 14 criado para usuário 1.
+2025-06-17 14:59:29,385 [INFO] Pedido reservado com sucesso! ID: 14
+2025-06-17 14:59:39,964 [ERROR] Pagamento recusado para o pedido 14.
+2025-06-17 14:59:39,967 [ERROR] Pagamento recusado para pedido 14
+2025-06-17 14:59:55,943 [INFO] Pedido 15 criado para usuário 1.
+2025-06-17 14:59:55,945 [INFO] Pedido reservado com sucesso! ID: 15
+2025-06-17 15:00:07,044 [ERROR] Pagamento recusado para o pedido 15.
+2025-06-17 15:00:07,047 [ERROR] Pagamento recusado para pedido 15
+2025-06-17 15:00:22,302 [INFO] Pedido 16 criado para usuário 1.
+2025-06-17 15:00:22,304 [INFO] Pedido reservado com sucesso! ID: 16
+2025-06-17 15:00:33,431 [ERROR] Pagamento recusado para o pedido 16.
+2025-06-17 15:00:33,434 [ERROR] Pagamento recusado para pedido 16
+2025-06-17 15:00:48,032 [INFO] Pedido 17 criado para usuário 1.
+2025-06-17 15:00:48,033 [INFO] Pedido reservado com sucesso! ID: 17
+2025-06-17 15:00:57,599 [ERROR] Pagamento recusado para o pedido 17.
+2025-06-17 15:00:57,602 [ERROR] Pagamento recusado para pedido 17
+2025-06-17 15:02:11,711 [INFO] Pedido 18 criado para usuário 1.
+2025-06-17 15:02:11,713 [INFO] Pedido reservado com sucesso! ID: 18
+2025-06-17 15:02:21,333 [INFO] Nota fiscal gerada para o pedido 18: notas_fiscais\nota_18.json
+2025-06-17 15:02:21,333 [INFO] Pagamento aprovado para o pedido 18. Nota fiscal gerada.
+2025-06-17 15:02:21,336 [INFO] Pagamento aprovado para pedido 18
+2025-06-17 15:03:15,788 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-17 15:03:37,209 [INFO] Cadeiras escolhidas: A1
+2025-06-17 15:03:39,269 [INFO] Pedido 19 criado para usuário 1.
+2025-06-17 15:03:39,271 [INFO] Pedido reservado com sucesso! ID: 19
+2025-06-17 15:03:51,130 [ERROR] Pagamento recusado para o pedido 19.
+2025-06-17 15:03:51,133 [ERROR] Pagamento recusado para pedido 19
+2025-06-17 15:04:28,934 [INFO] Cadeiras escolhidas: A1
+2025-06-17 15:04:30,979 [INFO] Pedido 20 criado para usuário 1.
+2025-06-17 15:04:30,980 [INFO] Pedido reservado com sucesso! ID: 20
+2025-06-17 15:04:41,696 [ERROR] Pagamento recusado para o pedido 20.
+2025-06-17 15:04:41,698 [ERROR] Pagamento recusado para pedido 20
+2025-06-17 15:04:57,316 [INFO] Cadeiras escolhidas: A1
+2025-06-17 15:04:59,421 [INFO] Pedido 21 criado para usuário 1.
+2025-06-17 15:04:59,423 [INFO] Pedido reservado com sucesso! ID: 21
+2025-06-17 15:05:10,929 [ERROR] Pagamento recusado para o pedido 21.
+2025-06-17 15:05:10,932 [ERROR] Pagamento recusado para pedido 21
+2025-06-17 15:05:36,690 [INFO] Cadeiras escolhidas: A1
+2025-06-17 15:05:38,761 [INFO] Pedido 22 criado para usuário 1.
+2025-06-17 15:05:38,763 [INFO] Pedido reservado com sucesso! ID: 22
+2025-06-17 15:05:49,449 [ERROR] Pagamento recusado para o pedido 22.
+2025-06-17 15:05:49,452 [ERROR] Pagamento recusado para pedido 22

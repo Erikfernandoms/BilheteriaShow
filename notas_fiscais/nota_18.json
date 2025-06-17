@@ -1,0 +1,19 @@
+{
+    "numero_nota": "NFS-000018",
+    "data_emissao": "2025-06-17T15:02:21.324586",
+    "cliente": {
+        "id": 1,
+        "nome": "Erik",
+        "email": "mendes"
+    },
+    "produtos": [],
+    "ingresso": {
+        "evento": "Rock in Rio",
+        "setor": "Pista",
+        "quantidade_ingressos": 1,
+        "cadeira": null,
+        "valor_total": 180
+    },
+    "total": 180,
+    "mensagem": "Nota fiscal gerada automaticamente após pagamento."
+}

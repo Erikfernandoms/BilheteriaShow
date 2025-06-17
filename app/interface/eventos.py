@@ -4,7 +4,7 @@ from app.interface.pedido import listar_pedidos
 
 
 def menu_eventos(usuario_logado):
-    response = requests.get("http://localhost:8000/eventos/")
+    response = requests.get("http://localhost:8000/eventos/", verify=False)
     if response.status_code == 200:
         eventos = response.json()
         if not eventos:
@@ -22,6 +22,7 @@ def menu_eventos(usuario_logado):
         print("\n--------------------")
         print("1. Ver meus pedidos")
         print("2. Deseja comprar um ingresso para algum evento?")
+        print("3. Voltar ao menu principal")
 
         escolha = input("Escolha uma opção: ")
         if escolha.lower() == '1':
@@ -32,12 +33,14 @@ def menu_eventos(usuario_logado):
         elif escolha.lower() == '2':
             if usuario_logado:
                 evento_id = input(f"\nOlá, {usuario_logado['nome']}! Digite o ID do evento que deseja comprar ingresso: ")
-                response = requests.get(f"http://localhost:8000/eventos/{evento_id}")
+                response = requests.get(f"http://localhost:8000/eventos/{evento_id}", verify=False)
                 if response.status_code == 200: 
                     evento = response.json()
                 menu_setores(evento_id, evento, usuario_logado)
             else:
                 print("\nVocê precisa estar logado para comprar ingressos.")
+        elif escolha.lower() == '3':
+            return
         else:
             print("\nOpção inválida. Tente novamente.")
         return
@@ -48,7 +51,7 @@ def menu_eventos(usuario_logado):
 
 
 def menu_setores(evento_id, evento, usuario_logado):
-    response = requests.get(f"http://localhost:8000/eventos/setores/{evento_id}")
+    response = requests.get(f"http://localhost:8000/eventos/setores/{evento_id}", verify=False)
     if response.status_code != 200:
         print("\nErro ao buscar setores do evento. Tente novamente.")
         return
