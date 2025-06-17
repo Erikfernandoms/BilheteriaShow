@@ -238,6 +238,7 @@ def finalizar_pagamento(id_pedido):
         print("Pagamento aprovado! Sua compra está confirmada.")
     elif status_pagamento == "recusado":
         log_error(f"Pagamento recusado para pedido {id_pedido}")
+        response = requests.put(f"http://localhost:8000/pedidos/{id_pedido}/cancelar-por-pagamento-recusado", verify=False)
         print("Pagamento recusado pelo banco. Tente novamente.")
     else:
         log_error(f"Erro ao registrar pagamento no sistema para pedido {id_pedido}")

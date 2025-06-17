@@ -86,6 +86,14 @@ def listar_pedidos_usuario_repository(conn, usuario_id):
     cursor.execute("SELECT * FROM pedido WHERE id_usuario = ? and status != 'cancelado'", (usuario_id,))
     return cursor.fetchall()
 
+def buscar_pedidos_pagamentos_recusados_repository(conn, id_pedido):
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT * FROM pedido
+        WHERE id_pedido = ? and status = 'pagamento recusado' 
+    """, (id_pedido,))
+    return cursor.fetchone()
+
 def buscar_pedidos_reservados_expirados_repository(conn, agora):
     cursor = conn.cursor()
     cursor.execute("""
@@ -93,6 +101,7 @@ def buscar_pedidos_reservados_expirados_repository(conn, agora):
         WHERE status = 'reservado'
     """)
     return cursor.fetchall()
+
 
 def atualizar_status_pedido_expirado_repository(conn, id_pedido):
     cursor = conn.cursor()

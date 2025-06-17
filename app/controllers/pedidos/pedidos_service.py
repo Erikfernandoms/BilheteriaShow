@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from logger import log_info, log_error
 from metrics import incrementar_metrica
 from app.repositories.pedidos_repository import (
+    buscar_pedidos_pagamentos_recusados_repository,
     liberar_cadeiras_repository,
     obter_total_reservado_repository,
     obter_setor_evento_repository,
@@ -124,6 +125,78 @@ def cancelar_reservas_expiradas(conn):
             for id_produto, quantidade in produtos:
                 devolver_estoque_produto_repository(conn, id_produto, quantidade)
             log_info(f"Reserva expirada e cancelada para pedido {id_pedido}.")
+            log_info(f"Produtos adicionais devolvidos ao estoque para o pedido {id_pedido}.")
+
+def cancelar_pedidos_pagamento_recusado(conn, id_pedido):
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+
+        pedido = buscar_pedidos_pagamentos_recusados_repository(conn, id_pedido)
+        if not pedido:
+            return None
+        
+        id_pedido = pedido[0]
+        id_usuario = pedido[1]
+        id_evento = pedido[2]
+        id_setor_evento = pedido[3]
+        status = "cancelado"
+        setor = pedido[5]
+        cadeiras = pedido[6]
+        quantidade_ingressos = pedido[7]
+        reservado_ate = pedido[8]
+        valor_total = pedido[9]
+
+        # Devolve os lugares
+        devolver_lugares_setor_repository(conn, id_setor_evento, quantidade_ingressos)
+        log_info(f"Ingressos devolvidos para o setor {id_setor_evento} do pedido {id_pedido}.")
+
+        # Devolve os produtos
+        produtos = listar_produtos_do_pedido_para_expirado_repository(conn, id_pedido)
+        for id_produto, quantidade in produtos:
+            devolver_estoque_produto_repository(conn, id_produto, quantidade)
+        log_info(f"Produtos adicionais devolvidos ao estoque para o pedido {id_pedido}.")
+
+        # Libera cadeiras, se houver
+        if cadeiras:
+            identificacoes = [c.strip() for c in cadeiras.split(",")]
+            cursor = conn.cursor()
+            ids_cadeiras = buscar_ids_cadeiras(cursor, identificacoes)
+            liberar_cadeiras_repository(conn, id_setor_evento, ids_cadeiras)
+            log_info(f"Cadeiras {identificacoes} liberadas para o pedido {id_pedido}.")
+
+        # Atualiza status do pedido
+        atualizar_pedido_repository(conn, id_pedido, type("Pedido", (), {
+            "id_usuario": id_usuario,
+            "id_evento": id_evento,
+            "id_setor_evento": id_setor_evento,
+            "status": status,
+            "setor": setor,
+            "cadeira": cadeiras,
+            "quantidade_ingressos": quantidade_ingressos,
+            "reservado_ate": reservado_ate,
+            "valor_total": valor_total
+        })())
+
+        conn.commit()
+
+        return {
+            "id_pedido": id_pedido,
+            "id_usuario": id_usuario,
+            "id_evento": id_evento,
+            "id_setor_evento": id_setor_evento,
+            "status": status,
+            "setor": setor,
+            "cadeira": cadeiras,
+            "quantidade_ingressos": quantidade_ingressos,
+            "reservado_ate": reservado_ate,
+            "valor_total": valor_total,
+            "criado_em": None  # ajuste se quiser retornar a data real
+        }
+
+    except Exception as e:
+        conn.rollback()
+        log_error(f"Erro ao cancelar pedido {id_pedido} por pagamento recusado: {e}")
+        raise e
 
 def reservar_cadeiras(conn, id_setor_evento, lista_id_cadeiras):
     try:
