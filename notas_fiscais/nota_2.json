@@ -1,19 +1,25 @@
 {
     "numero_nota": "NFS-000002",
-    "data_emissao": "2025-06-17T14:47:51.231636",
+    "data_emissao": "2025-06-17T17:06:07.131799",
     "cliente": {
         "id": 1,
         "nome": "Erik",
         "email": "mendes"
     },
-    "produtos": [],
+    "produtos": [
+        {
+            "nome": "Refrigerante",
+            "quantidade": 2,
+            "preco_unitario": 8
+        }
+    ],
     "ingresso": {
-        "evento": "Show do Coldplay",
-        "setor": "Pista",
-        "quantidade_ingressos": 1,
-        "cadeira": null,
-        "valor_total": 125
+        "evento": "Pericles",
+        "setor": "Cadeira Inferior",
+        "quantidade_ingressos": 3,
+        "cadeira": "A1,A2,A3",
+        "valor_total": 240
     },
-    "total": 125,
+    "total": 256,
     "mensagem": "Nota fiscal gerada automaticamente após pagamento."
 }

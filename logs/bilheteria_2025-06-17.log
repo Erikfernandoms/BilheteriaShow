@@ -103,3 +103,64 @@
 2025-06-17 15:05:38,763 [INFO] Pedido reservado com sucesso! ID: 22
 2025-06-17 15:05:49,449 [ERROR] Pagamento recusado para o pedido 22.
 2025-06-17 15:05:49,452 [ERROR] Pagamento recusado para pedido 22
+2025-06-17 16:32:54,592 [INFO] Usuário Erik (mendes) cadastrado com sucesso.
+2025-06-17 16:33:01,488 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 16:33:32,400 [INFO] Pedido 1 criado para usuário 1.
+2025-06-17 16:33:32,402 [INFO] Pedido reservado com sucesso! ID: 1
+2025-06-17 16:33:44,100 [INFO] Nota fiscal gerada para o pedido 1: notas_fiscais\nota_1.json
+2025-06-17 16:33:44,100 [INFO] Pagamento aprovado para o pedido 1. Nota fiscal gerada.
+2025-06-17 16:33:44,103 [INFO] Pagamento aprovado para pedido 1
+2025-06-17 16:50:34,797 [INFO] Ingressos devolvidos para o setor 4 do pedido 1.
+2025-06-17 16:50:34,798 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 1.
+2025-06-17 16:50:41,394 [INFO] Ingressos devolvidos para o setor 4 do pedido 1.
+2025-06-17 16:50:41,394 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 1.
+2025-06-17 16:52:31,406 [INFO] Ingressos devolvidos para o setor 4 do pedido 1.
+2025-06-17 16:52:31,406 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 1.
+2025-06-17 16:59:00,722 [INFO] Ingressos devolvidos para o setor 4 do pedido 1.
+2025-06-17 16:59:00,722 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 1.
+2025-06-17 16:59:42,658 [INFO] Ingressos devolvidos para o setor 4 do pedido 1.
+2025-06-17 16:59:42,658 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 1.
+2025-06-17 17:03:53,517 [INFO] Ingressos devolvidos para o setor 4 do pedido 1.
+2025-06-17 17:03:53,517 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 1.
+2025-06-17 17:05:23,588 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 17:05:47,292 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:05:49,356 [INFO] Pedido 2 criado para usuário 1.
+2025-06-17 17:05:49,358 [INFO] Pedido reservado com sucesso! ID: 2
+2025-06-17 17:05:57,448 [INFO] Produto 12 adicionado ao pedido 2 com quantidade 2.
+2025-06-17 17:06:07,140 [INFO] Nota fiscal gerada para o pedido 2: notas_fiscais\nota_2.json
+2025-06-17 17:06:07,141 [INFO] Pagamento aprovado para o pedido 2. Nota fiscal gerada.
+2025-06-17 17:06:07,143 [INFO] Pagamento aprovado para pedido 2
+2025-06-17 17:07:04,788 [INFO] Ingressos devolvidos para o setor 6 do pedido 2.
+2025-06-17 17:07:04,788 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 2.
+2025-06-17 17:07:04,788 [INFO] Cadeiras ['A1', 'A2', 'A3'] liberadas para o pedido 2.
+2025-06-17 17:07:47,809 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:07:49,874 [INFO] Pedido 3 criado para usuário 1.
+2025-06-17 17:07:49,875 [INFO] Pedido reservado com sucesso! ID: 3
+2025-06-17 17:07:58,088 [INFO] Produto 7 adicionado ao pedido 3 com quantidade 10.
+2025-06-17 17:08:06,385 [ERROR] Pagamento recusado para o pedido 3.
+2025-06-17 17:08:06,388 [ERROR] Pagamento recusado para pedido 3
+2025-06-17 17:12:01,532 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:12:03,587 [INFO] Pedido 4 criado para usuário 1.
+2025-06-17 17:12:03,589 [INFO] Pedido reservado com sucesso! ID: 4
+2025-06-17 17:12:20,120 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 17:12:37,170 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:12:39,627 [ERROR] Erro ao reservar ingresso: Você só pode reservar até 3 ingressos por evento, considerando todos os seus pedidos ativos.
+2025-06-17 17:13:03,027 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:13:05,088 [INFO] Pedido 5 criado para usuário 1.
+2025-06-17 17:13:05,089 [INFO] Pedido reservado com sucesso! ID: 5
+2025-06-17 17:13:13,415 [INFO] Produto 12 adicionado ao pedido 5 com quantidade 10.
+2025-06-17 17:13:21,550 [ERROR] Pagamento recusado para o pedido 5.
+2025-06-17 17:13:21,553 [ERROR] Pagamento recusado para pedido 5
+2025-06-17 17:13:49,714 [INFO] Usuário Erik (mendes) logado com sucesso.
+2025-06-17 17:14:07,784 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:14:09,842 [INFO] Pedido 6 criado para usuário 1.
+2025-06-17 17:14:09,844 [INFO] Pedido reservado com sucesso! ID: 6
+2025-06-17 17:14:17,218 [INFO] Produto 9 adicionado ao pedido 6 com quantidade 10.
+2025-06-17 17:14:26,211 [ERROR] Pagamento recusado para o pedido 6.
+2025-06-17 17:14:26,214 [ERROR] Pagamento recusado para pedido 6
+2025-06-17 17:14:28,267 [INFO] Ingressos devolvidos para o setor 7 do pedido 6.
+2025-06-17 17:14:28,267 [INFO] Produtos adicionais devolvidos ao estoque para o pedido 6.
+2025-06-17 17:14:28,267 [INFO] Cadeiras ['A1', 'A2', 'A3'] liberadas para o pedido 6.
+2025-06-17 17:14:49,606 [INFO] Cadeiras escolhidas: A1,A2,A3
+2025-06-17 17:14:51,656 [INFO] Pedido 7 criado para usuário 1.
+2025-06-17 17:14:51,658 [INFO] Pedido reservado com sucesso! ID: 7

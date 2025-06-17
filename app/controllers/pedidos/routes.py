@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 import sqlite3
 from typing import List
-from app.controllers.pedidos.pedidos_service import criar_pedido, listar_produtos_do_pedido, atualizar_pedido, deletar_pedido, listar_pedidos, listar_pedidos_usuario
+from app.controllers.pedidos.pedidos_service import cancelar_pedidos_pagamento_recusado, criar_pedido, listar_produtos_do_pedido, atualizar_pedido, deletar_pedido, listar_pedidos, listar_pedidos_usuario
 from app.models.pedido import PedidoBase, PedidoOut, ProdutoPedidoOut
 import random
 
@@ -13,6 +13,13 @@ def get_db():
     finally:
         conn.close()
 
+
+@router.put("/{pedido_id}/cancelar-por-pagamento-recusado", response_model=PedidoBase)
+def atualizar_pagamento_recusado(pedido_id: int, db = Depends(get_db)):
+    pedido = cancelar_pedidos_pagamento_recusado(db, pedido_id)
+    if not pedido:
+        raise HTTPException(status_code=404, detail="Pedido não encontrado")
+    return pedido
 
 @router.post("/{pedido_id}/recusar")
 def recusar_pagamento_pedido(pedido_id: int, db=Depends(get_db)):
@@ -51,6 +58,7 @@ def deletar(pedido_id: int, db = Depends(get_db)):
     if not sucesso:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return {"message": "Pedido deletado com sucesso"}
+
 
 @router.get("/{pedido_id}/produtos", response_model=List[ProdutoPedidoOut])
 def produtos_do_pedido(pedido_id: int, db=Depends(get_db)):

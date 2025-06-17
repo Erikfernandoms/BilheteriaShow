@@ -35,6 +35,6 @@ def registrar_pagamento(conn, pagamento):
         raise e
 
 def mock_pagamento_externo():
-    if random.random() < 0.9:
+    if random.random() < 0.1:
         return {"status": "aprovado"}
     return {"status": "recusado"}
