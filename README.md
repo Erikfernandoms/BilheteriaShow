@@ -36,7 +36,7 @@ Documentação breve explicando suas decisões técnicas.
 | WAF + Shield      | Proteção contra ataques como DDoS e SQL Injection           |
 | CloudWatch + X-Ray| Observabilidade e tracing distribuído                       |
 | QuickSight        | Dashboards analíticos via RDS replica ou arquivos do S3     |
-| Broker            | Dashboards analíticos via RDS replica ou arquivos do S3     |
+| Bedrock           | Dashboards analíticos via RDS replica ou arquivos do S3     |
 
 ---
 
