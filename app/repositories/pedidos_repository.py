@@ -83,7 +83,7 @@ def deletar_pedido_repository(conn, pedido_id):
 
 def listar_pedidos_usuario_repository(conn, usuario_id):
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM pedido WHERE id_usuario = ? and status != 'cancelado'", (usuario_id,))
+    cursor.execute("SELECT * FROM pedido WHERE id_usuario = ? and status != 'expirado'", (usuario_id,))
     return cursor.fetchall()
 
 def buscar_pedidos_pagamentos_recusados_repository(conn, id_pedido):

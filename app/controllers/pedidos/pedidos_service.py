@@ -139,7 +139,7 @@ def cancelar_pedidos_pagamento_recusado(conn, id_pedido):
         id_usuario = pedido[1]
         id_evento = pedido[2]
         id_setor_evento = pedido[3]
-        status = "cancelado"
+        status = "pagamento recusado"
         setor = pedido[5]
         cadeiras = pedido[6]
         quantidade_ingressos = pedido[7]
